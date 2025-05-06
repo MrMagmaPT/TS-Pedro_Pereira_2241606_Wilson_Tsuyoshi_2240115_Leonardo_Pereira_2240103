@@ -96,12 +96,12 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(27, 9);
+            this.label2.Location = new System.Drawing.Point(22, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(229, 29);
             this.label2.TabIndex = 7;
             this.label2.Text = "Chat Com: nome";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // FormMain
