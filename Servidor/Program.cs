@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using EI.SI;
 
 namespace Servidor
 {
@@ -21,8 +22,6 @@ namespace Servidor
             Console.WriteLine("Server Ready!!!");
             int clientCounter = 0;
 
-
-            
             while (clientCounter < 2)
             {
                 TcpClient client = listener.AcceptTcpClient();
