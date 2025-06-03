@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
+namespace Projeto_TS
 {
     static class Program
     {

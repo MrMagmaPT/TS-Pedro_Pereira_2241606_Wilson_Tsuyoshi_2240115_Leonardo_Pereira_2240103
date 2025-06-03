@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties
+namespace Projeto_TS.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Projeto_TS.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

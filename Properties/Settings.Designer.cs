@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties
+namespace Projeto_TS.Properties
 {
 
 

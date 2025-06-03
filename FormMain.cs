@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EI.SI;
 
-namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
+namespace Projeto_TS
 {
     public partial class FormMain: Form
     {

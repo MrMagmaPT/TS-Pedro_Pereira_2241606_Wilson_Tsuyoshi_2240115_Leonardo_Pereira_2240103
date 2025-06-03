@@ -1,4 +1,4 @@
-﻿namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
+﻿namespace Projeto_TS
 {
     partial class FormLogin
     {
