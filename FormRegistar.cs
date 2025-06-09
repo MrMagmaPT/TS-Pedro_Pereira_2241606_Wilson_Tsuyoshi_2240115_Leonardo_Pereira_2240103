@@ -19,12 +19,12 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
         //declaração de variaveis globais
         bool hasCustomImage = false; // Verifica se o utilizador selecionou uma imagem personalizada
         SqlConnection conn = new SqlConnection(); // Conexão com a base de dados
-        string caminhoDB = "E:\\UNI\\Segundo Semestre\\TS - Técnicas de segurança\\Projeto de TS\\Projeto-TS-Pedro_Pereira_2241606&Wilson_Tsuyoshi_2240115";
+        string caminhoDB = "D:\\2 semestre\\TS-Tópicos de Segurança\\Projeto\\TS-Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115";
         string username = null;
         string password = null;
         string passwordHash = null;
         string saltedPasswordHash = null;
-        Image defaultUserImage = Properties.Resources.defaultUserImage; // Imagem padrão do utilizador
+        Image defaultUserImage = Properties.Resources.defaultUserImage_png; // Imagem padrão do utilizador
         private const int NUMBER_OF_ITERATIONS = 10000; // Número de iterações para o algoritmo de hashing
         private const int SALT_SIZE = 8; // Tamanho do salt em bytes
 

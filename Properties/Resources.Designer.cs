@@ -63,9 +63,19 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap defaultUserImage {
+        internal static System.Drawing.Bitmap defaultUserImage_png {
             get {
-                object obj = ResourceManager.GetObject("defaultUserImage", resourceCulture);
+                object obj = ResourceManager.GetObject("defaultUserImage.png", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TokTok {
+            get {
+                object obj = ResourceManager.GetObject("TokTok", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

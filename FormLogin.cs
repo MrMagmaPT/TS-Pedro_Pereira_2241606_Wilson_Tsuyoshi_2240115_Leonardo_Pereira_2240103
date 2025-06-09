@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.IO;
+using Projeto_TS;
+using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115;
 
 namespace Projeto_TS
 {
     public partial class FormLogin: Form
     {
-        string caminhoDB = "E:\\UNI\\Segundo Semestre\\TS - Técnicas de segurança\\Projeto de TS\\Projeto-TS-Pedro_Pereira_2241606&Wilson_Tsuyoshi_2240115";
+        string caminhoDB = "D:\\2 semestre\\TS-Tópicos de Segurança\\Projeto\\TS-Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115";
         private const int NUMBER_OF_ITERATIONS = 10000; // Número de iterações para o algoritmo de hashing
         private const int SALT_SIZE = 8; // Tamanho do salt em bytes
 
@@ -99,7 +102,7 @@ namespace Projeto_TS
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occurred: " + e.Message);
+                MessageBox.Show("An error occurred: PLAU" + e.Message);
                 return false;
             }
         }
