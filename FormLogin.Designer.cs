@@ -35,6 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnRegistar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1
@@ -104,11 +105,23 @@
             this.label4.Text = "Password:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // btnRegistar
+            // 
+            this.btnRegistar.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRegistar.Location = new System.Drawing.Point(305, 344);
+            this.btnRegistar.Name = "btnRegistar";
+            this.btnRegistar.Size = new System.Drawing.Size(164, 47);
+            this.btnRegistar.TabIndex = 7;
+            this.btnRegistar.Text = "Registar";
+            this.btnRegistar.UseVisualStyleBackColor = true;
+            this.btnRegistar.Click += new System.EventHandler(this.btnRegistar_Click);
+            // 
             // FormLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnRegistar);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -117,6 +130,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Name = "FormLogin";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormLogin";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -132,5 +146,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnRegistar;
     }
 }
