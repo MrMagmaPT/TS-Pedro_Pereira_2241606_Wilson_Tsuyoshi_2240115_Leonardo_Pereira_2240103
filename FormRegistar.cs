@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -88,7 +89,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 
 
 
-                                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='"+ caminhoDB +"';Integrated Security=True"); // String de conexão com a base de dados
+                                conn.ConnectionString = String.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='"+ caminhoDB+ "\\UserDataBase.mdf" +"';Integrated Security=True"); // String de conexão com a base de dados
                                 conn.Open(); // Abre a conexão com a base de dados
 
                                 SqlParameter paramUsername = new SqlParameter("@Username", username);
@@ -98,12 +99,25 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 //verifica se o utilizador selecionou uma imagem personalizada
                                 if (hasCustomImage)
                                 {
-                                    Image userImage = pbUserImage.Image; // Obtém a imagem do utilizador selecionada na PictureBox
-                                    paramImage = new SqlParameter("@Profpic", userImage); // Inicializa a imagem com a imagem selecionada
+                                    using (MemoryStream ms = new MemoryStream())
+                                    {
+                                        pbUserImage.Image.Save(ms, pbUserImage.Image.RawFormat);
+                                        paramImage = new SqlParameter("@Profpic", SqlDbType.VarBinary)
+                                        {
+                                            Value = ms.ToArray()
+                                        };
+                                    }
                                 }
                                 else
                                 {
-                                    paramImage = new SqlParameter("@Profpic", defaultUserImage); // Inicializa a imagem como nula
+                                    using (MemoryStream ms = new MemoryStream())
+                                    {
+                                        defaultUserImage.Save(ms, defaultUserImage.RawFormat);
+                                        paramImage = new SqlParameter("@Profpic", SqlDbType.VarBinary)
+                                        {
+                                            Value = ms.ToArray()
+                                        };
+                                    }
                                 }
                                 String sql = "INSERT INTO UserData (Username, Passhash, Saltedhash,Profpic) VALUES (@username,@Passhash,@Saltedhash,@Profpic)";
 
