@@ -57,51 +57,42 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 // Obter Hash (password + salt)
                 byte[] saltedPasswordHashStored = (byte[])reader["SaltedPasswordHash"];
 
-
-
-
-
-                byte[] profilePicBytes = null;
-                Image profilePic = null;
-                if (!reader.IsDBNull(reader.GetOrdinal("ProfPic")))
-                {
-                    profilePicBytes = (byte[])reader["ProfPic"];
-                    MessageBox.Show("Bytes lidos: " + profilePicBytes.Length); // Veja se está vindo algo
-                    if (profilePicBytes != null && profilePicBytes.Length > 0)
-                    {
-                        try
-                        {
-                            using (MemoryStream ms = new MemoryStream(profilePicBytes))
-                            {
-                                profilePic = Image.FromStream(ms);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Erro ao converter imagem: " + ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Campo ProfPic está vazio.");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Campo ProfPic é DBNull.");
-                }
-
-
-
-
-
-
-
-
                 // Obter salt
                 byte[] saltStored = (byte[])reader["Salt"];
 
                 connection.Close();
+
+                connection.Open(); // Reabre a conexão para obter a imagem de perfil
+
+                sql = "SELECT ProfPic FROM UserData WHERE Username = @username";
+                cmd = new SqlCommand();
+                cmd.CommandText = sql;
+
+                param = new SqlParameter("@username", username);
+
+                cmd.Parameters.Add(param);
+
+                cmd.Connection = connection;
+
+                reader = cmd.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    throw new Exception("Error while trying to access "+ username +" image");
+                }
+                Image ProfPic = null;
+                if (reader.Read() && !reader.IsDBNull(reader.GetOrdinal("ProfPic")))
+                {
+                    byte[] profPicBytes = (byte[])reader["ProfPic"];
+                    if (profPicBytes != null && profPicBytes.Length > 0)
+                    {
+                        using (MemoryStream ms = new MemoryStream(profPicBytes))
+                        {
+                            ProfPic = Image.FromStream(ms);
+                        }
+                    }
+                }
+
 
                 //TODO: verificar se a password na base de dados 
                 byte[] saltedPasswordHash = Controllers.SaltedHashText.GenerateSaltedHash(password, saltStored, 1000);
@@ -109,7 +100,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 
                 if (saltedPasswordHashStored.SequenceEqual(saltedPasswordHash))
                 {
-                    return profilePic; // Se a password corresponder, retorna a imagem de perfil do utilizador
+                    return ProfPic; // Se a password corresponder, retorna a imagem de perfil do utilizador
                 } else
                 {
                     return null; // Se a password não corresponder, retorna false
@@ -119,7 +110,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occurred: " + e.Message);
+                MessageBox.Show("An error occurred: " + e);
                 return null;
             }
         }

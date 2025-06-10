@@ -26,6 +26,8 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
         Hash Hash = new Hash();
         Salt Salt = new Salt();
         SaltedHashText SaltedHashText = new SaltedHashText();
+
+
         // Tamanho do salt em bytes
         private const int SALT_SIZE = 8; 
 

@@ -14,6 +14,7 @@ using Projeto_TS;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115;
+using System.Linq.Expressions;
 
 namespace Projeto_TS
 {
@@ -59,7 +60,7 @@ namespace Projeto_TS
             string username = txbUsername.Text;
 
             Image profilePic = controllerFormLogin.verifyLogin(username, password);
-            if (profilePic == null)
+            if (profilePic != null)
             {
                 MessageBox.Show("Login efetuado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 FormMain formMain = new FormMain(username, profilePic);
