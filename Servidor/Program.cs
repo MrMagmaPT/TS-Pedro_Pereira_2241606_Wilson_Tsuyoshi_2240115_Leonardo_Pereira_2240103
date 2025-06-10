@@ -19,14 +19,14 @@ namespace Servidor
             TcpListener listener = new TcpListener(endPoint);
 
             listener.Start();
-            Console.WriteLine("Server Ready!!!");
+            Console.WriteLine("Servidor Iniciado !!!");
             int clientCounter = 0;
 
             while (clientCounter < 2)
             {
                 TcpClient client = listener.AcceptTcpClient();
                 clientCounter++;
-                Console.WriteLine("Cliente {0} connected", clientCounter);
+                Console.WriteLine("Clientes {0} conectados", clientCounter);
 
                 if (clientCounter == 1) {
                     TcpClient cliente1 = listener.AcceptTcpClient();

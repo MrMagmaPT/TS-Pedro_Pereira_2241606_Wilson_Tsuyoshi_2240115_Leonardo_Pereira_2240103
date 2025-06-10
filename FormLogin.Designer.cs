@@ -125,7 +125,7 @@
             // btnRegistar
             // 
             this.btnRegistar.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRegistar.Location = new System.Drawing.Point(305, 344);
+            this.btnRegistar.Location = new System.Drawing.Point(305, 346);
             this.btnRegistar.Name = "btnRegistar";
             this.btnRegistar.Size = new System.Drawing.Size(164, 47);
             this.btnRegistar.TabIndex = 7;

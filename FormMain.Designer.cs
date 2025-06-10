@@ -33,11 +33,11 @@
             this.tbxMsg = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pBImagem = new System.Windows.Forms.PictureBox();
+            this.lbNome = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pBImagem)).BeginInit();
             this.SuspendLayout();
             // 
             // btnEnviarMsg
@@ -79,26 +79,26 @@
             this.textBox1.Size = new System.Drawing.Size(717, 230);
             this.textBox1.TabIndex = 3;
             // 
-            // pictureBox2
+            // pBImagem
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(763, 68);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(177, 164);
-            this.pictureBox2.TabIndex = 5;
-            this.pictureBox2.TabStop = false;
+            this.pBImagem.Location = new System.Drawing.Point(763, 68);
+            this.pBImagem.Margin = new System.Windows.Forms.Padding(4);
+            this.pBImagem.Name = "pBImagem";
+            this.pBImagem.Size = new System.Drawing.Size(177, 164);
+            this.pBImagem.TabIndex = 5;
+            this.pBImagem.TabStop = false;
             // 
-            // label1
+            // lbNome
             // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(763, 240);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(177, 60);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "nome";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbNome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNome.Location = new System.Drawing.Point(763, 240);
+            this.lbNome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbNome.Name = "lbNome";
+            this.lbNome.Size = new System.Drawing.Size(177, 60);
+            this.lbNome.TabIndex = 6;
+            this.lbNome.Text = "nome";
+            this.lbNome.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
@@ -119,8 +119,8 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(979, 598);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.lbNome);
+            this.Controls.Add(this.pBImagem);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.tbxMsg);
@@ -130,7 +130,7 @@
             this.Name = "FormMain";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pBImagem)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,8 +141,8 @@
         private System.Windows.Forms.TextBox tbxMsg;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pBImagem;
+        private System.Windows.Forms.Label lbNome;
         private System.Windows.Forms.Label label2;
     }
 }

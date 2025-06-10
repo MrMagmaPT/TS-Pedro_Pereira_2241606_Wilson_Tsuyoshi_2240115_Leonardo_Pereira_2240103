@@ -7,7 +7,7 @@
     <ProjectGuid>{E7E5310F-749E-498D-AEF9-422B21F82BE8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115</RootNamespace>
-    <AssemblyName>Projeto-TS-Pedro_Pereira_2241606&amp;Wilson_Tsuyoshi_2240115</AssemblyName>
+    <AssemblyName>Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -65,6 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ControllerFormMain.cs" />
+    <Compile Include="Controllers\ControllerFormLogin.cs" />
+    <Compile Include="Controllers\ControllerFormRegistar.cs" />
+    <Compile Include="Controllers\ControllerFormServidor.cs" />
+    <Compile Include="Controllers\ControllerHashAndSalt.cs" />
     <Compile Include="FormRegistar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +89,7 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormLogin.resx">
@@ -134,5 +140,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

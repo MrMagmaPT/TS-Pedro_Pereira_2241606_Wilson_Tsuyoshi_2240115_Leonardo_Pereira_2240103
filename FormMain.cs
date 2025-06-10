@@ -9,6 +9,10 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 using EI.SI;
 
 namespace Projeto_TS
@@ -20,11 +24,13 @@ namespace Projeto_TS
 
         //Criação das variaveis com suas classes
         NetworkStream networkStream;
-        ProtocolSI protSI = new ProtocolSI();
+        ProtocolSI protSI;
         TcpClient client;
+        RSACryptoServiceProvider rsa;
+        Thread tReceber;
 
 
-        public FormMain()
+        public FormMain(int id)
         {
             InitializeComponent();
             //inicializou/instanciou o endpoint que é a combinação do ip da propria maquina por isso loopback + PORT
@@ -36,7 +42,14 @@ namespace Projeto_TS
 
             //Passagem de informação
             networkStream = client.GetStream();
-            ProtocolSI prot = new ProtocolSI();
+                
+            rsa = new RSACryptoServiceProvider(2048);
+
+            protSI = new ProtocolSI();
+
+            string username = null; //vem da query
+            pBImagem.Image = null; //vem da query
+
         }
 
         private void btnEnviarMsg_Click(object sender, EventArgs e)
