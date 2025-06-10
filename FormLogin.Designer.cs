@@ -44,7 +44,7 @@
             // 
             this.txbUsername.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbUsername.Location = new System.Drawing.Point(212, 141);
-            this.txbUsername.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txbUsername.Margin = new System.Windows.Forms.Padding(2);
             this.txbUsername.Name = "txbUsername";
             this.txbUsername.Size = new System.Drawing.Size(157, 38);
             this.txbUsername.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             this.txbPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbPassword.Location = new System.Drawing.Point(212, 200);
-            this.txbPassword.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txbPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txbPassword.Name = "txbPassword";
             this.txbPassword.Size = new System.Drawing.Size(157, 38);
             this.txbPassword.TabIndex = 1;
@@ -72,7 +72,7 @@
             // 
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.Location = new System.Drawing.Point(229, 244);
-            this.btnLogin.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogin.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(123, 38);
             this.btnLogin.TabIndex = 3;
@@ -124,7 +124,7 @@
             // 
             this.btnRegistar.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegistar.Location = new System.Drawing.Point(229, 288);
-            this.btnRegistar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnRegistar.Margin = new System.Windows.Forms.Padding(2);
             this.btnRegistar.Name = "btnRegistar";
             this.btnRegistar.Size = new System.Drawing.Size(123, 38);
             this.btnRegistar.TabIndex = 7;
