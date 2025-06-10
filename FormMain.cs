@@ -20,7 +20,7 @@ namespace Projeto_TS
     public partial class FormMain: Form
     {
         //definição do port
-        private const int PORT = 10000;
+        private const int PORT = 12345;
 
         //Criação das variaveis com suas classes
         NetworkStream networkStream;
@@ -28,9 +28,11 @@ namespace Projeto_TS
         TcpClient client;
         RSACryptoServiceProvider rsa;
         Thread tReceber;
+        string _Username;
+        Image _ProfilePicture;
 
 
-        public FormMain(int id)
+        public FormMain(string username, Image profilePicture)
         {
             InitializeComponent();
             //inicializou/instanciou o endpoint que é a combinação do ip da propria maquina por isso loopback + PORT
@@ -47,9 +49,12 @@ namespace Projeto_TS
 
             protSI = new ProtocolSI();
 
-            string username = null; //vem da query
-            pBImagem.Image = null; //vem da query
+            _Username = username; //username terá o nome do utilizador que foi passado pelo form de login
+            _ProfilePicture = profilePicture; //profilePicture terá a imagem do perfil que foi passada pelo form de login
 
+            lbServerIP.Text = "Server IP: " + endPoint.ToString(); //mostra o ip do servidor no label
+            lbNome.Text = _Username; //mostra o nome do utilizador no label
+            pbUserImage.Image = _ProfilePicture; //mostra a imagem do perfil no picturebox
         }
 
         private void btnEnviarMsg_Click(object sender, EventArgs e)
@@ -74,9 +79,6 @@ namespace Projeto_TS
             }
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
 
-        }
     }
 }

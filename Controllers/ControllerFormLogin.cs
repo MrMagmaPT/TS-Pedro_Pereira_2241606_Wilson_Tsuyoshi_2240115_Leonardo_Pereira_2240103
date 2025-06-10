@@ -17,7 +17,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 {
     class ControllerFormLogin
     {
-        public  bool verifyLogin(string username, string password)
+        public Image verifyLogin(string username, string password)
         {
             SqlConnection connection = null;
 
@@ -58,6 +58,46 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 byte[] saltedPasswordHashStored = (byte[])reader["SaltedPasswordHash"];
 
 
+
+
+
+                byte[] profilePicBytes = null;
+                Image profilePic = null;
+                if (!reader.IsDBNull(reader.GetOrdinal("ProfPic")))
+                {
+                    profilePicBytes = (byte[])reader["ProfPic"];
+                    MessageBox.Show("Bytes lidos: " + profilePicBytes.Length); // Veja se está vindo algo
+                    if (profilePicBytes != null && profilePicBytes.Length > 0)
+                    {
+                        try
+                        {
+                            using (MemoryStream ms = new MemoryStream(profilePicBytes))
+                            {
+                                profilePic = Image.FromStream(ms);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Erro ao converter imagem: " + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Campo ProfPic está vazio.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Campo ProfPic é DBNull.");
+                }
+
+
+
+
+
+
+
+
                 // Obter salt
                 byte[] saltStored = (byte[])reader["Salt"];
 
@@ -67,14 +107,20 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 byte[] saltedPasswordHash = Controllers.SaltedHashText.GenerateSaltedHash(password, saltStored, 1000);
 
 
-                return saltedPasswordHashStored.SequenceEqual(saltedPasswordHash);
+                if (saltedPasswordHashStored.SequenceEqual(saltedPasswordHash))
+                {
+                    return profilePic; // Se a password corresponder, retorna a imagem de perfil do utilizador
+                } else
+                {
+                    return null; // Se a password não corresponder, retorna false
+                }
 
-                throw new NotImplementedException();
+                    throw new NotImplementedException();
             }
             catch (Exception e)
             {
-                MessageBox.Show("An error occurred: PLAU" + e.Message);
-                return false;
+                MessageBox.Show("An error occurred: " + e.Message);
+                return null;
             }
         }
 

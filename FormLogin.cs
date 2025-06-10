@@ -57,10 +57,14 @@ namespace Projeto_TS
         {
             string password = txbPassword.Text;
             string username = txbUsername.Text;
-            if (controllerFormLogin.verifyLogin(username, password))
+
+            Image profilePic = controllerFormLogin.verifyLogin(username, password);
+            if (profilePic == null)
             {
                 MessageBox.Show("Login efetuado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                FormMain formMain = new FormMain(username, profilePic);
+                formMain.Show();
+                this.Hide();
             }
             else
             {
