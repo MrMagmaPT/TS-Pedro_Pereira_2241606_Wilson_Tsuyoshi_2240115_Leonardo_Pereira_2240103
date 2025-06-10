@@ -26,9 +26,6 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
         Hash Hash = new Hash();
         Salt Salt = new Salt();
         SaltedHashText SaltedHashText = new SaltedHashText();
-
-        // Número de iterações para o algoritmo de hashing
-        private const int NUMBER_OF_ITERATIONS = 10000;
         // Tamanho do salt em bytes
         private const int SALT_SIZE = 8; 
 
@@ -99,10 +96,10 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 string passwordHash = Hash.HashPassword(password);
 
                                 // Gera o hash da senha com o salt (use the original password, not the hash)
-                                byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(password, salt, NUMBER_OF_ITERATIONS);
+                                byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(password, salt, 1000);
 
+                                // Converte a imagem da PictureBox para um objeto Image
                                 Image profPic = pbUserImage.Image;
-
 
                                 // Chama o método Registar para inserir os dados na base de dados
                                 Controllers.ControllerFormRegistar controller = new Controllers.ControllerFormRegistar();

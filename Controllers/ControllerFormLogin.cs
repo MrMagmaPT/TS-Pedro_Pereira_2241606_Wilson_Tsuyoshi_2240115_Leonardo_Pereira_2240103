@@ -64,9 +64,10 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 connection.Close();
 
                 //TODO: verificar se a password na base de dados 
-                byte[] hash = Controllers.SaltedHashText.GenerateSaltedHash(password, saltStored, 1000);
+                byte[] saltedPasswordHash = Controllers.SaltedHashText.GenerateSaltedHash(password, saltStored, 1000);
 
-                return saltedPasswordHashStored.SequenceEqual(hash);
+
+                return saltedPasswordHashStored.SequenceEqual(saltedPasswordHash);
 
                 throw new NotImplementedException();
             }

@@ -20,7 +20,7 @@ namespace Projeto_TS
     public partial class FormLogin: Form
     {
         // Declaração de variáveis globais
-        private const int NUMBER_OF_ITERATIONS = 10000; // Número de iterações para o algoritmo de hashing
+        private const int NUMBER_OF_ITERATIONS = 1000; // Número de iterações para o algoritmo de hashing
         private const int SALT_SIZE = 8; // Tamanho do salt em bytes
 
         //Controllers
