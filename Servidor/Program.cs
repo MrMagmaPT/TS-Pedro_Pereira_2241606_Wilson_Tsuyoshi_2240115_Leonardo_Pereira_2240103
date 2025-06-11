@@ -12,10 +12,12 @@ namespace Servidor
 {
     class Program
     {
-
+        static List<string> historicoMensagens = new List<string>();
         static TcpListener server;
         static List<TcpClient> clientes = new List<TcpClient>();
-        static Dictionary<string, string> chavesPublicas = new Dictionary<string, string>(); // username → chave pública
+
+        // Dicionário para armazenar chaves públicas dos utilizadores
+        static Dictionary<string, string> chavesPublicas = new Dictionary<string, string>(); 
         static object lockObj = new object();
 
         static void Main(string[] args)
@@ -51,43 +53,59 @@ namespace Servidor
                     switch (protocolo.GetCmdType())
                     {
                         case ProtocolSICmdType.USER_OPTION_1:
-                            // Enviar pedido de autenticação
-                            byte[] msg = protocolo.Make(ProtocolSICmdType.DATA, "Envie o seu nome de utilizador:");
-                            ns.Write(msg, 0, msg.Length);
+                            // Recebe o username
+                            username = protocolo.GetStringFromData();
+                            Console.WriteLine($"[Servidor] Utilizador identificado: {username}");
+
+                            // Pede a chave pública
+                            byte[] resposta = protocolo.Make(ProtocolSICmdType.DATA, "Envie a sua chave pública (base64):");
+                            ns.Write(resposta, 0, resposta.Length);
+                            break;
+
+                        case ProtocolSICmdType.USER_OPTION_2:
+                            // Recebe a chave pública
+                            string chavePublicaBase64 = protocolo.GetStringFromData();
+                            chavesPublicas[username] = chavePublicaBase64;
+                            Console.WriteLine($"[Servidor] Chave pública recebida de {username}");
+
+                            // Confirma autenticação
+                            byte[] ok = protocolo.Make(ProtocolSICmdType.DATA, "Autenticado com sucesso!");
+                            ns.Write(ok, 0, ok.Length);
+
+                            // Adiciona à lista de clientes
+                            lock (lockObj)
+                                clientes.Add(cliente);
+
+                            break;
+
+                        case ProtocolSICmdType.USER_OPTION_3:
+                            // histórico de mensagens
+                            lock (lockObj)
+                            {
+                                foreach (var msg in historicoMensagens)
+                                {
+                                    byte[] msgPacket = protocolo.Make(ProtocolSICmdType.DATA, msg);
+                                    ns.Write(msgPacket, 0, msgPacket.Length);
+                                }
+                            }
                             break;
 
                         case ProtocolSICmdType.DATA:
-                            if (string.IsNullOrEmpty(username))
-                            {
-                                username = protocolo.GetStringFromData();
-                                Console.WriteLine($"[Servidor] Utilizador identificado: {username}");
+                            // Mensagem de chat
+                            string msgChat = protocolo.GetStringFromData();
+                            string mensagemFormatada = $"{username}: {msgChat}";
+                            Console.WriteLine($"[Mensagem de {username}]: {msgChat}");
 
-                                // Responde pedindo a chave pública
-                                byte[] resposta = protocolo.Make(ProtocolSICmdType.DATA, "Envie a sua chave pública (base64):");
-                                ns.Write(resposta, 0, resposta.Length);
-                            }
-                            else if (!chavesPublicas.ContainsKey(username))
-                            {
-                                string chavePublicaBase64 = protocolo.GetStringFromData();
-                                chavesPublicas[username] = chavePublicaBase64;
-                                Console.WriteLine($"[Servidor] Chave pública recebida de {username}");
+                            // Adiciona ao histórico
+                            lock (lockObj)
+                                historicoMensagens.Add(mensagemFormatada);
 
-                                // Avisar cliente que está autenticado
-                                byte[] ok = protocolo.Make(ProtocolSICmdType.DATA, "Autenticado com sucesso!");
-                                ns.Write(ok, 0, ok.Length);
+                            // Envia para todos os outros clientes
+                            EnviarParaTodos($"{username}: {msgChat}", cliente);
 
-                                // Adicionar à lista de clientes
-                                lock (lockObj)
-                                    clientes.Add(cliente);
-                            }
-                            else
-                            {
-                                string msgChat = protocolo.GetStringFromData();
-                                Console.WriteLine($"[Mensagem de {username}]: {msgChat}");
-
-                                // Enviar mensagem a todos os outros clientes
-                                EnviarParaTodos($"{username}: {msgChat}", cliente);
-                            }
+                            // Envia ACK para o remetente
+                            byte[] ack = protocolo.Make(ProtocolSICmdType.ACK);
+                            ns.Write(ack, 0, ack.Length);
                             break;
 
                         case ProtocolSICmdType.EOF:
@@ -120,13 +138,13 @@ namespace Servidor
             {
                 foreach (TcpClient cli in clientes)
                 {
-                    if (cli != remetente)
-                    {
-                        NetworkStream ns = cli.GetStream();
-                        ns.Write(dados, 0, dados.Length);
-                    }
+                    NetworkStream ns = cli.GetStream();
+                    ns.Write(dados, 0, dados.Length);
                 }
             }
         }
+
+        
+
     }
 }
