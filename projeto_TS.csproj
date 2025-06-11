@@ -68,7 +68,7 @@
     <Compile Include="Controllers\ControllerFormMain.cs" />
     <Compile Include="Controllers\ControllerFormLogin.cs" />
     <Compile Include="Controllers\ControllerFormRegistar.cs" />
-    <Compile Include="Controllers\ControllerFormServidor.cs" />
+    <Compile Include="Controllers\ControllerFormServer.cs" />
     <Compile Include="Controllers\ControllerHashAndSalt.cs" />
     <Compile Include="FormRegistar.cs">
       <SubType>Form</SubType>
