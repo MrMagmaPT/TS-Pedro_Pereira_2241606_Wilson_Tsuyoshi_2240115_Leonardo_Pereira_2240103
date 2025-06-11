@@ -16,6 +16,12 @@ namespace Servidor.Models
         private TcpClient client;
         private int clientID;
 
+        //instancia o controller de registo
+        ControllerFormRegistar controllerRegistar = new ControllerFormRegistar();
+
+        //instancia o controller de login
+        ControllerFormLogin controllerLogin = new ControllerFormLogin();
+
         public ClientHandler(TcpClient client, int clientID)
         {
             this.client = client;
@@ -54,22 +60,42 @@ namespace Servidor.Models
                             case 1:
                                 //realiza o registo do utilizador
                                 Console.WriteLine("Registo de utilizador iniciado pelo cliente {0}", clientID);
-                                ControllerFormRegistar controllerRegistar = new ControllerFormRegistar();
-                                //obter dados sem o primero byte
-                                byte[] dadosSemTipo = dados.Skip(1).ToArray(); // Pula o primeiro byte que é o tipo de comando
 
-                                Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosSemTipo);
+                                //obter dados sem o primero byte
+                                byte[] dadosRegistarSemTipo = dados.Skip(1).ToArray(); // Pula o primeiro byte que é o tipo de comando
+
+                                Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosRegistarSemTipo);
                                 string mensagem = controllerRegistar.Registar(user);
                                 Console.WriteLine("Mensagem de registo: " + mensagem);
 
                                 //mandar msg para o utilizador a enviar uma resposta a dizer se foi bem sucedido ou nao
 
-                                byte[] resposta = protocolSI.Make(ProtocolSICmdType.DATA,mensagem);
+                                byte[] resposta = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
                                 networkStream.Write(resposta, 0, resposta.Length);
 
                                 break;
                             case 2:
-                                //comecone
+                                //realiza o login do utilizador e mostra no cmd
+                                Console.WriteLine("Login iniciado pelo cliente {0}", clientID);
+
+                                //obter dados sem o primero byte
+                                byte[] dadosLoginSemTipo = dados.Skip(1).ToArray();
+
+                                //Converte os dados recebidos em uma string
+                                string dadosLoginString = Encoding.UTF8.GetString(dadosLoginSemTipo);
+
+                                //Separa os dados em partes usando o separador de nova linha
+                                string[] parts = dadosLoginString.Split('\n');
+                                string username = parts[0];
+                                string SaltePasswordHashString = parts[1];
+
+                                //Converte o SaltePasswordHashString de volta para um array de bytes
+                                byte[] profPic = controllerLogin.verifyLogin(username, SaltePasswordHashString);
+
+                                // Se o profPic for null, significa que o login falhou
+                                byte[] respostaProfilePic = protocolSI.Make(ProtocolSICmdType.DATA, profPic);
+                                networkStream.Write(respostaProfilePic, 0, respostaProfilePic.Length);
+
                                 break;
                             case 3:
                                 //comcepica
@@ -77,7 +103,6 @@ namespace Servidor.Models
                             default:
                                 throw new Exception("Tipo de comando desconhecido.");
                         }
-
                         ack = protocolSI.Make(ProtocolSICmdType.ACK);
                         networkStream.Write(ack, 0, ack.Length);
                         break;

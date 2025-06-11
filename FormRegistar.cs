@@ -98,7 +98,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 string passwordHash = Hash.HashPassword(password);
 
                                 // Gera o hash da senha com o salt (use the original password, not the hash)
-                                byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(password, salt, 1000);
+                                byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(passwordHash, salt, 1000);
 
                                 // Converte a imagem da PictureBox para um objeto Image
                                 Image userImage = pbUserImage.Image;
@@ -125,7 +125,6 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 //criar metodo para enviar mensagem para o servidor
                                 enviarMensagem(mensagemComTipo); //envia a mensagem para o servidor
 
-                                int num_resposta = 0; //variavel para receber a resposta do servidor
 
                                 while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK)
                                 {
@@ -146,7 +145,19 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                     }
                                 }
                             }
+                            else
+                            {
+                                MessageBox.Show("As senhas não coincidem.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
+                        else
+                        {
+                            MessageBox.Show("A confirmação da senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("A senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -177,8 +188,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
 
                 //encripatar a mensagem com o protocolo SI
 
-                
-
+            
                 //  _____ __  __  ____ _____ __ _____ _____  ___   ____  ___   _____  
                 //  ||==  ||\\|| ((    ||_// || ||_//  ||   ||=|| ((    ||=|| ((   )) 
                 //  ||___ || \||  \\__ || \\ || ||     ||   || ||  \\__ || ||  \\_//  

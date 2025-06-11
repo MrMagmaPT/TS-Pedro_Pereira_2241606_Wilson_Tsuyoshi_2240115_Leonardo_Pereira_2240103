@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ControllerFormLogin.cs" />
     <Compile Include="Controllers\ControllerFormRegistar.cs" />
+    <Compile Include="Controllers\ControllerHashAndSalt.cs" />
     <Compile Include="Controllers\ControllerSerializar.cs" />
     <Compile Include="Models\ClientHandler.cs" />
     <Compile Include="Models\MessageTypeEnum.cs" />
