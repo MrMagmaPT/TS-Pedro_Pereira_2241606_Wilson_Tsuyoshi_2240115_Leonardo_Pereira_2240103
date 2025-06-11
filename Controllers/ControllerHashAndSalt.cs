@@ -33,7 +33,6 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 
     class Salt
     {
-
         public static byte[] GenerateSalt(int size)
         {
             //Generate a cryptographic random number.
