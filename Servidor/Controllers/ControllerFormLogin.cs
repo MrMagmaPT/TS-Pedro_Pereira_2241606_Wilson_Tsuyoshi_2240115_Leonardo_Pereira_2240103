@@ -17,6 +17,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
     {
         public byte[] verifyLogin(string username, string passwordHash)
         {
+            SqlDataReader reader = null;
             SqlConnection connection = null;
             byte[] profPicBytes = null;
 
@@ -44,7 +45,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 cmd.Connection = connection;
 
                 // Executar comando SQL
-                SqlDataReader reader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
                 if (!reader.HasRows)
                 {
@@ -59,10 +60,8 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 byte[] saltedStored = (byte[])reader["Salt"];
 
                 connection.Close(); // Fecha a conexão com a base de dados após ler os dados iniciais
+
                 connection.Open(); // Reabre a conexão para ler a imagem de perfil
-
-
-                
 
                 sql = "SELECT ProfPic FROM UserData WHERE Username = @username";
                 cmd = new SqlCommand();

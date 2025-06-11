@@ -1,19 +1,20 @@
-﻿using System;
+﻿using EI.SI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Net.Sockets;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using EI.SI;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Projeto_TS
 {
@@ -27,33 +28,47 @@ namespace Projeto_TS
         ProtocolSI protSI;
         TcpClient client;
         RSACryptoServiceProvider rsa;
+
         Thread tReceber;
+
         string _Username;
         Image _ProfilePicture;
 
 
-        public FormMain(string username, Image profilePicture)
+        public FormMain(string username, byte[] profPic, TcpClient clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld)
         {
             InitializeComponent();
             //inicializou/instanciou o endpoint que é a combinação do ip da propria maquina por isso loopback + PORT
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, PORT);
 
             //criação do cliente e conecta ao endpoint 
-            client = new TcpClient();
-            client.Connect(endPoint);
+            client = clientOld;
 
             //Passagem de informação
-            networkStream = client.GetStream();
+            networkStream = nsOld;
                 
             rsa = new RSACryptoServiceProvider(2048);
 
-            protSI = new ProtocolSI();
+            protSI = protocolSIOld;
+
+            Image profilePicture = null; //converte o byte[] para uma imagem
+            if (profPic != null && profPic.Length != 0)
+            {
+                using (MemoryStream ms = new MemoryStream(profPic))
+                {
+                    profilePicture = Image.FromStream(ms);
+                }
+            } else
+            {
+                MessageBox.Show(Convert.ToBase64String(profPic));
+            }
+
 
             _Username = username; //username terá o nome do utilizador que foi passado pelo form de login
             _ProfilePicture = profilePicture; //profilePicture terá a imagem do perfil que foi passada pelo form de login
 
             lbServerIP.Text = "Server IP: " + endPoint.ToString(); //mostra o ip do servidor no label
-            lbNome.Text = _Username; //mostra o nome do utilizador no label
+            lbNome.Text = "Nome: " + _Username; //mostra o nome do utilizador no label
             pbUserImage.Image = _ProfilePicture; //mostra a imagem do perfil no picturebox
         }
 
@@ -74,7 +89,6 @@ namespace Projeto_TS
             //Fazemos um ciclo While para esperar a resposta do cliente
             while (protSI.GetCmdType() != ProtocolSICmdType.ACK)  
             {
-                //
                 networkStream.Read(protSI.Buffer, 0, protSI.Buffer.Length);
             }
         }

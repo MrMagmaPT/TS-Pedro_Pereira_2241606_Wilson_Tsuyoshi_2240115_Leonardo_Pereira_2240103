@@ -28,7 +28,7 @@ namespace Servidor
             TcpListener listener = new TcpListener(endPoint);
 
             listener.Start();
-            Console.WriteLine("The Server IS READY");
+            Console.WriteLine("O Server está online e a ouvir na porta: "+PORT);
             int clientCounter = 0;
 
             while (true)
@@ -37,7 +37,7 @@ namespace Servidor
                 TcpClient client = listener.AcceptTcpClient();
                 //INCREMENTE O NUMERO DE CLIENTES
                 clientCounter++;
-                Console.WriteLine("Cliente {0} connected.", clientCounter);
+                Console.WriteLine("Cliente connectado.", clientCounter);
 
                 ClientHandler clientHandler = new ClientHandler(client, clientCounter);
                 clientHandler.Handle();

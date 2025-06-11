@@ -81,83 +81,90 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
             {
                 if (!string.IsNullOrWhiteSpace(txbUsername.Text))
                 {
-                    if (!string.IsNullOrWhiteSpace(txbPass.Text))
+                    if (txbUsername.Text.Length <= 24)
                     {
-                        if (!string.IsNullOrWhiteSpace(txbConfirmPass.Text))
+                        if (!string.IsNullOrWhiteSpace(txbPass.Text))
                         {
-                            if (txbPass.Text == txbConfirmPass.Text)
+                            if (!string.IsNullOrWhiteSpace(txbConfirmPass.Text))
                             {
-                                // Facilita a leitura do código ao criar variáveis para o nome de utilizador e senha
-                                string username = txbUsername.Text;
-                                string password = txbPass.Text;
-                                 
-                                // Gera um salt aleatório
-                                byte[] salt = Salt.GenerateSalt(SALT_SIZE);
-
-                                // Gera o hash da senha sem salt
-                                string passwordHash = Hash.HashPassword(password);
-
-                                // Gera o hash da senha com o salt (use the original password, not the hash)
-                                byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(passwordHash, salt, 1000);
-
-                                // Converte a imagem da PictureBox para um objeto Image
-                                Image userImage = pbUserImage.Image;
-                                if (userImage != null)
+                                if (txbPass.Text == txbConfirmPass.Text)
                                 {
-                                    using (var ms = new MemoryStream())
+                                    // Facilita a leitura do código ao criar variáveis para o nome de utilizador e senha
+                                    string username = txbUsername.Text;
+                                    string password = txbPass.Text;
+
+                                    // Gera um salt aleatório
+                                    byte[] salt = Salt.GenerateSalt(SALT_SIZE);
+
+                                    // Gera o hash da senha sem salt
+                                    string passwordHash = Hash.HashPassword(password);
+
+                                    // Gera o hash da senha com o salt (use the original password, not the hash)
+                                    byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(passwordHash, salt, 1000);
+
+                                    // Converte a imagem da PictureBox para um objeto Image
+                                    Image userImage = pbUserImage.Image;
+                                    if (userImage != null)
                                     {
-                                        userImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png); // Salva a imagem no formato PNG
-                                        profPic = ms.ToArray();
+                                        using (var ms = new MemoryStream())
+                                        {
+                                            userImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png); // Salva a imagem no formato PNG
+                                            profPic = ms.ToArray();
+                                        }
+                                    }
+
+                                    //cria o objeto Usuario com os dados do utilizador
+                                    Usuario usuario = new Usuario(username, passwordHash, saltedPasswordHash, salt, profPic);
+
+                                    //converter usuario para array de byte
+                                    byte[] userBytes = ControllerSerializar.SerializaParaArrayBytes<Usuario>(usuario);
+
+                                    //adicionar o endereço da mensagem (enum do tipo de mensagem) para o array de bytes
+                                    MessageTypeEnum messageType = new MessageTypeEnum(); //instanciação do enum de tipo de mensagem
+                                    MessageTypeEnum.MessageType tipo = MessageTypeEnum.MessageType.Register; //enum de prefixo para registar
+                                    byte[] mensagemComTipo = messageType.CreateMessage(tipo, userBytes); //criação da mensagem com o tipo de mensagem e o array de bytes do utilizador
+
+                                    //criar metodo para enviar mensagem para o servidor
+                                    enviarMensagem(mensagemComTipo); //envia a mensagem para o servidor
+
+
+                                    while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK)
+                                    {
+                                        // Lê a resposta do servidor
+                                        ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                                        byte[] resposta = protocolSI.GetData(); // Obtém os dados da resposta
+                                        if (resposta == null)
+                                        {
+                                            MessageBox.Show("Erro ao receber a resposta do servidor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            return;
+                                        }
+                                        else if (Encoding.UTF8.GetString(resposta) == "0")
+                                        {
+                                            CloseRegistar();// se a resposta for 0, sai do metodo porque 0 significa semi EOT (End of Transmission) e não há mais dados a receber desta trsnmição
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show(Encoding.UTF8.GetString(resposta), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        }
                                     }
                                 }
-
-                                //cria o objeto Usuario com os dados do utilizador
-                                Usuario usuario = new Usuario(username, passwordHash, saltedPasswordHash, salt, profPic);
-
-                                //converter usuario para array de byte
-                                byte[] userBytes = ControllerSerializar.SerializaParaArrayBytes<Usuario>(usuario);
-
-                                //adicionar o endereço da mensagem (enum do tipo de mensagem) para o array de bytes
-                                MessageTypeEnum messageType = new MessageTypeEnum(); //instanciação do enum de tipo de mensagem
-                                MessageTypeEnum.MessageType tipo = MessageTypeEnum.MessageType.Register; //enum de prefixo para registar
-                                byte[] mensagemComTipo = messageType.CreateMessage(tipo, userBytes); //criação da mensagem com o tipo de mensagem e o array de bytes do utilizador
-
-                                //criar metodo para enviar mensagem para o servidor
-                                enviarMensagem(mensagemComTipo); //envia a mensagem para o servidor
-
-
-                                while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK)
+                                else
                                 {
-                                    // Lê a resposta do servidor
-                                    ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                                    byte[] resposta = protocolSI.GetData(); // Obtém os dados da resposta
-                                    if (resposta == null)
-                                    {
-                                        MessageBox.Show("Erro ao receber a resposta do servidor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        return;
-                                    }
-                                    else if (Encoding.UTF8.GetString(resposta) == "0")
-                                    {
-                                        CloseRegistar();// se a resposta for 0, sai do metodo porque 0 significa semi EOT (End of Transmission) e não há mais dados a receber desta trsnmição
-                                    } else
-                                    {
-                                        MessageBox.Show(Encoding.UTF8.GetString(resposta), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    }
+                                    MessageBox.Show("As senhas não coincidem.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }
                             }
                             else
                             {
-                                MessageBox.Show("As senhas não coincidem.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("A confirmação da senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                         else
                         {
-                            MessageBox.Show("A confirmação da senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("A senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                    }
-                    else
+                    } else
                     {
-                        MessageBox.Show("A senha não pode estar vazia.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("O nome de utilizador não pode ter mais do que 24 caracteres.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else

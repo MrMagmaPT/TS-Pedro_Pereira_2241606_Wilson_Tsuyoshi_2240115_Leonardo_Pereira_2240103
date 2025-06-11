@@ -15,6 +15,7 @@ namespace Servidor.Models
     {
         private TcpClient client;
         private int clientID;
+        string username;
 
         //instancia o controller de registo
         ControllerFormRegistar controllerRegistar = new ControllerFormRegistar();
@@ -50,23 +51,20 @@ namespace Servidor.Models
                 {
                     //ENVIA DADOS
                     case ProtocolSICmdType.DATA:
-                        //ESCREVER MSG DO CLIENTE NA CONSOLA
-                        Console.WriteLine("Client " + clientID + ": " + protocolSI.GetStringFromData());
 
                         byte[] dados = protocolSI.GetData();
 
                         switch (dados[0])
                         {
                             case 1:
-                                //realiza o registo do utilizador
-                                Console.WriteLine("Registo de utilizador iniciado pelo cliente {0}", clientID);
-
                                 //obter dados sem o primero byte
                                 byte[] dadosRegistarSemTipo = dados.Skip(1).ToArray(); // Pula o primeiro byte que é o tipo de comando
 
                                 Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosRegistarSemTipo);
                                 string mensagem = controllerRegistar.Registar(user);
-                                Console.WriteLine("Mensagem de registo: " + mensagem);
+                                username = user.username;
+                                //realiza o registo do utilizador
+                                Console.WriteLine("[Servidor] - Registo de utilizador iniciado pelo cliente: " + username);
 
                                 //mandar msg para o utilizador a enviar uma resposta a dizer se foi bem sucedido ou nao
 
@@ -75,9 +73,6 @@ namespace Servidor.Models
 
                                 break;
                             case 2:
-                                //realiza o login do utilizador e mostra no cmd
-                                Console.WriteLine("Login iniciado pelo cliente {0}", clientID);
-
                                 //obter dados sem o primero byte
                                 byte[] dadosLoginSemTipo = dados.Skip(1).ToArray();
 
@@ -86,19 +81,22 @@ namespace Servidor.Models
 
                                 //Separa os dados em partes usando o separador de nova linha
                                 string[] parts = dadosLoginString.Split('\n');
-                                string username = parts[0];
+                                username = parts[0];
                                 string SaltePasswordHashString = parts[1];
+
+                                //realiza o login do utilizador e mostra no cmd
+                                Console.WriteLine("[Servidor] - Login iniciado pelo cliente: " + username);
 
                                 //Converte o SaltePasswordHashString de volta para um array de bytes
                                 byte[] profPic = controllerLogin.verifyLogin(username, SaltePasswordHashString);
 
-                                // Se o profPic for null, significa que o login falhou
+
                                 byte[] respostaProfilePic = protocolSI.Make(ProtocolSICmdType.DATA, profPic);
                                 networkStream.Write(respostaProfilePic, 0, respostaProfilePic.Length);
-
+                                
                                 break;
                             case 3:
-                                //comcepica
+                                //mensagem
                                 break;
                             default:
                                 throw new Exception("Tipo de comando desconhecido.");
@@ -108,15 +106,15 @@ namespace Servidor.Models
                         break;
                     //CASO O CLIENTE ENVIE EOT (FIM DA TRANSMISSÃO)
                     case ProtocolSICmdType.EOT:
-                        Console.WriteLine("Ending Thread from client {0}", clientID);
+                        Console.WriteLine("[Servidor] - A terminar a ligação com o cliente: " + username);
                         ack = protocolSI.Make(ProtocolSICmdType.ACK);
                         networkStream.Write(ack, 0, ack.Length);
                         break;
                 }
             }
+            // Close resources after the loop
             networkStream.Close();
             client.Close();
-
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Projeto_TS
     public partial class FormLogin: Form
     {
         FormRegistar formRegistar = new FormRegistar();
-
+        FormMain formMain;
 
         //instancia do protocolo SI para enviar e receber mensagens
         ProtocolSI protocolSI;
@@ -82,7 +82,10 @@ namespace Projeto_TS
             {
                 // Lê a resposta do servidor
                 ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                byte[] profPic = protocolSI.GetData(); // Obtém os dados da resposta
+                byte[] profPic = protocolSI.GetData(); // Obtém os dados da resposta da stream
+                //extrai os bytes da imajem da stream
+                
+
                 if (profPic == null)
                 {
                     MessageBox.Show("Erro no login", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -90,12 +93,17 @@ namespace Projeto_TS
                 }
                 else if (Encoding.UTF8.GetString(profPic) == "0")
                 {
-                    //envia para o form chat as infromacoes do utilizador
+                    //what
                 } else
                 {
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    formMain = new FormMain(username, profPic, client, ns, protocolSI);
+                    formMain.Show(); // Mostra o formulário principal
+
+                    
+                    this.Hide(); // Esconde o formulário de login
                 }
-            }
+            };
         }
     }
 }

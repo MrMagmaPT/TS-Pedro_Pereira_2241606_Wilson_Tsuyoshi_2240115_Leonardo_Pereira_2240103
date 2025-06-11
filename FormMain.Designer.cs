@@ -43,10 +43,9 @@
             // btnEnviarMsg
             // 
             this.btnEnviarMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEnviarMsg.Location = new System.Drawing.Point(796, 508);
-            this.btnEnviarMsg.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEnviarMsg.Location = new System.Drawing.Point(597, 413);
             this.btnEnviarMsg.Name = "btnEnviarMsg";
-            this.btnEnviarMsg.Size = new System.Drawing.Size(170, 60);
+            this.btnEnviarMsg.Size = new System.Drawing.Size(128, 49);
             this.btnEnviarMsg.TabIndex = 0;
             this.btnEnviarMsg.Text = "Enviar";
             this.btnEnviarMsg.UseVisualStyleBackColor = true;
@@ -54,42 +53,37 @@
             // 
             // tbxMsg
             // 
-            this.tbxMsg.Location = new System.Drawing.Point(36, 486);
-            this.tbxMsg.Margin = new System.Windows.Forms.Padding(4);
+            this.tbxMsg.Location = new System.Drawing.Point(27, 395);
             this.tbxMsg.Multiline = true;
             this.tbxMsg.Name = "tbxMsg";
-            this.tbxMsg.Size = new System.Drawing.Size(745, 82);
+            this.tbxMsg.Size = new System.Drawing.Size(560, 67);
             this.tbxMsg.TabIndex = 1;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(36, 74);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Location = new System.Drawing.Point(27, 74);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(745, 355);
+            this.textBox1.Size = new System.Drawing.Size(560, 275);
             this.textBox1.TabIndex = 3;
             // 
             // lbNome
             // 
-            this.lbNome.AutoSize = true;
             this.lbNome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNome.Location = new System.Drawing.Point(879, 9);
-            this.lbNome.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbNome.Location = new System.Drawing.Point(12, 9);
             this.lbNome.Name = "lbNome";
-            this.lbNome.Size = new System.Drawing.Size(87, 34);
+            this.lbNome.Size = new System.Drawing.Size(525, 33);
             this.lbNome.TabIndex = 6;
-            this.lbNome.Text = "nome";
-            this.lbNome.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbNome.Text = "Nome:";
+            this.lbNome.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lbServerIP
             // 
             this.lbServerIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbServerIP.Location = new System.Drawing.Point(13, 9);
-            this.lbServerIP.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbServerIP.Location = new System.Drawing.Point(543, 9);
             this.lbServerIP.Name = "lbServerIP";
-            this.lbServerIP.Size = new System.Drawing.Size(243, 21);
+            this.lbServerIP.Size = new System.Drawing.Size(182, 17);
             this.lbServerIP.TabIndex = 7;
             this.lbServerIP.Text = "Server IP: ";
             this.lbServerIP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -97,10 +91,9 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(31, 34);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(23, 42);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(305, 36);
+            this.label1.Size = new System.Drawing.Size(229, 29);
             this.label1.TabIndex = 8;
             this.label1.Text = "Mensagens:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -108,10 +101,9 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(31, 446);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(23, 362);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(305, 36);
+            this.label2.Size = new System.Drawing.Size(229, 29);
             this.label2.TabIndex = 9;
             this.label2.Text = "A sua mensagem:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -119,20 +111,19 @@
             // pbUserImage
             // 
             this.pbUserImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbUserImage.Location = new System.Drawing.Point(796, 272);
-            this.pbUserImage.Margin = new System.Windows.Forms.Padding(4);
+            this.pbUserImage.Location = new System.Drawing.Point(597, 221);
             this.pbUserImage.Name = "pbUserImage";
-            this.pbUserImage.Size = new System.Drawing.Size(170, 157);
+            this.pbUserImage.Size = new System.Drawing.Size(128, 128);
             this.pbUserImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbUserImage.TabIndex = 17;
             this.pbUserImage.TabStop = false;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(979, 598);
+            this.ClientSize = new System.Drawing.Size(734, 486);
             this.Controls.Add(this.pbUserImage);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -142,9 +133,8 @@
             this.Controls.Add(this.tbxMsg);
             this.Controls.Add(this.btnEnviarMsg);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
-            this.Text = "Form1";
+            this.Text = "FormMain";
             ((System.ComponentModel.ISupportInitialize)(this.pbUserImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
