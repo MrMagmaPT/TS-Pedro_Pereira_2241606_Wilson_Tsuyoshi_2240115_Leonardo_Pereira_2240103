@@ -1,35 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
+﻿using EI.SI;
+using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers;
+using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
+using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
-using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers;
 
 namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
 {
     public partial class FormRegistar : Form
     {
         //declaração de variaveis globais
-        SqlConnection connection = new SqlConnection(); // Conexão com a base de dados
-
-        //ControllerS
-        ControllerFormRegistar controllerRegistar = new Controllers.ControllerFormRegistar();
-        Hash Hash = new Hash();
-        Salt Salt = new Salt();
-        SaltedHashText SaltedHashText = new SaltedHashText();
+        byte[] profPic = null;
 
 
         // Tamanho do salt em bytes
         private const int SALT_SIZE = 8; 
+
+
+        //protocolo si e cenas
+        ProtocolSI protocolSI;
+        NetworkStream ns;
+        TcpClient client;
+        private const int PORT = 12345;
+
+
+
 
         public FormRegistar()
         {
@@ -39,7 +38,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
         private void pbUserImage_Click(object sender, EventArgs e)
         {
             // Abre um diálogo para selecionar uma imagem
-            openFileDialogImagem.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+            openFileDialogImagem.Filter = "Image Files|*.png;";
             openFileDialogImagem.Title = "Select User Image - Max 256x256p";
             openFileDialogImagem.DefaultExt = "png";
             openFileDialogImagem.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
@@ -55,13 +54,14 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                     string imagePath = openFileDialogImagem.FileName;
                     Image userImage = Image.FromFile(imagePath);
                     // Verifica se a imagem é maior que 256x256 pixels
-                    if (userImage.Width > 256 || userImage.Height > 256)
+                    if (userImage.Width > 16 || userImage.Height > 16)
                     {
-                        MessageBox.Show("A imagem tem de ser 256x256 pixels ou menor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("A imagem tem de ser 16x16 pixels ou menor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     // Exibe a imagem na PictureBox
                     pbUserImage.Image = userImage;
+                    profPic = File.ReadAllBytes(openFileDialogImagem.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -101,24 +101,50 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                                 byte[] saltedPasswordHash = SaltedHashText.GenerateSaltedHash(password, salt, 1000);
 
                                 // Converte a imagem da PictureBox para um objeto Image
-                                Image profPic = pbUserImage.Image;
+                                Image userImage = pbUserImage.Image;
+                                if (userImage != null)
+                                {
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        userImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png); // Salva a imagem no formato PNG
+                                        profPic = ms.ToArray();
+                                    }
+                                }
 
-                                // Chama o método Registar para inserir os dados na base de dados
-                                Controllers.ControllerFormRegistar controller = new Controllers.ControllerFormRegistar();
-
+                                //cria o objeto Usuario com os dados do utilizador
                                 Usuario usuario = new Usuario(username, passwordHash, saltedPasswordHash, salt, profPic);
 
                                 //converter usuario para array de byte
                                 byte[] userBytes = ControllerSerializar.SerializaParaArrayBytes<Usuario>(usuario);
 
-                                //enviar encriptado o array de bytes conhecido como usuario para o servidor
+                                //adicionar o endereço da mensagem (enum do tipo de mensagem) para o array de bytes
+                                MessageTypeEnum messageType = new MessageTypeEnum(); //instanciação do enum de tipo de mensagem
+                                MessageTypeEnum.MessageType tipo = MessageTypeEnum.MessageType.Register; //enum de prefixo para registar
+                                byte[] mensagemComTipo = messageType.CreateMessage(tipo, userBytes); //criação da mensagem com o tipo de mensagem e o array de bytes do utilizador
 
+                                //criar metodo para enviar mensagem para o servidor
+                                enviarMensagem(mensagemComTipo); //envia a mensagem para o servidor
 
+                                int num_resposta = 0; //variavel para receber a resposta do servidor
 
-
-
-
-                                controllerRegistar.Registar(usuario);
+                                while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK)
+                                {
+                                    // Lê a resposta do servidor
+                                    ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+                                    byte[] resposta = protocolSI.GetData(); // Obtém os dados da resposta
+                                    if (resposta == null)
+                                    {
+                                        MessageBox.Show("Erro ao receber a resposta do servidor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                    else if (Encoding.UTF8.GetString(resposta) == "0")
+                                    {
+                                        CloseRegistar();// se a resposta for 0, sai do metodo porque 0 significa semi EOT (End of Transmission) e não há mais dados a receber desta trsnmição
+                                    } else
+                                    {
+                                        MessageBox.Show(Encoding.UTF8.GetString(resposta), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
+                                }
                             }
                         }
                     }
@@ -135,18 +161,57 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
             }
         }
 
+        private bool enviarMensagem(byte[] mensagem)
+        {
+            try
+            {
+                //declaração inicial de dependencias para a comunicação entre o cliente e o servidor
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT); // Define o ponto final do servidor (localhost e porta 12345)
 
+                client = new TcpClient(); // Cria uma nova instância do cliente TCP
 
+                client.Connect(endpoint); // Conecta ao servidor
 
+                ns = client.GetStream(); // Obtém o network stream do cliente para enviar e receber dados
+                protocolSI = new ProtocolSI(); // Instanciação do protocolo SI
 
+                //encripatar a mensagem com o protocolo SI
 
+                
 
+                //  _____ __  __  ____ _____ __ _____ _____  ___   ____  ___   _____  
+                //  ||==  ||\\|| ((    ||_// || ||_//  ||   ||=|| ((    ||=|| ((   )) 
+                //  ||___ || \||  \\__ || \\ || ||     ||   || ||  \\__ || ||  \\_//  
 
+                                                                                                                                                            
 
+                //prepara a informação em modelo do protocolo SI
+                byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, mensagem); // Criação da mensagem com o tipo de comando e os dados do utilizador
 
+                // Envia a mensagem para o servidor
+                ns.Write(packet, 0, packet.Length); // Envia a mensagem para o servidor
 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro a enviar os dados de registo para o servidor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
 
+        private void CloseRegistar()
+        {
+            //ENVIAR O EOT(END OF TRANSMISSION) PARA O SERVIDOR
+            byte[] eot = protocolSI.Make(ProtocolSICmdType.EOT);
+            ns.Write(eot, 0, eot.Length);
 
+            //LER O ACK(acknowledgement)
+            ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
 
+            ns.Close();
+            client.Close();
+            this.Close(); // Fecha o formulário de registo
+        }
     }
 }

@@ -1,16 +1,13 @@
 ﻿using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
 
 namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 {
@@ -18,9 +15,9 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
     {
         private SqlConnection connection = null;
 
-        string caminhoDB = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName; //ajustar o numero de .parent para subir ou descer na arvore de organização dos folders
+        string caminhoDB = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName; //ajustar o numero de .parent para subir ou descer na arvore de organização dos folders
 
-        public void Registar(Usuario user)
+        public string Registar(Usuario user)
         {
             try
             {
@@ -33,7 +30,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 SqlParameter passwordHashParam = new SqlParameter("@passwordHash", user.passwordHash);
                 SqlParameter saltedPasswordHashParam = new SqlParameter("@saltedPasswordHash", user.saltedPasswordHash);
                 SqlParameter saltParam = new SqlParameter("@salt", user.salt);
-                SqlParameter profPicParam = new SqlParameter("@profPic", user.profilePicture);
+                SqlParameter profPicParam = new SqlParameter("@profPic", SqlDbType.Image);
 
 
                 // Declaração do comando SQL
@@ -48,11 +45,19 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 comando.Parameters.Add(saltParam);
 
                 // Converte a imagem para um array de bytes e adiciona ao comando SQL
-                if (user.profilePicture == null)
+                if (user.profilePicture != null)
                 {
+                    // Converte a imagem para um array de bytes
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        profPicParam.Value = user.profilePicture;
+                    }
+                }
+                else
+                {
+                    // Se não houver imagem, define o parâmetro como DBNull
                     profPicParam.Value = null;
                 }
-                
                 // Adiciona o parâmetro da imagem ao comando SQL
                 comando.Parameters.Add(profPicParam);
 
@@ -62,17 +67,17 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 
                 if (lines > 0) // Verifica se o comando foi executado com sucesso
                 {
-                    MessageBox.Show("Utilizador registado com sucesso!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return "Utilizador registado com sucesso!";
                 }
-                else
-                {
-                    MessageBox.Show("Erro ao registar utilizador.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else 
+                { 
+                    throw new Exception("Nenhuma linha afetada na base de dados.");
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao registar utilizador: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return "Erro ao registar utilizador: " + ex.Message;
             }
             finally
             {

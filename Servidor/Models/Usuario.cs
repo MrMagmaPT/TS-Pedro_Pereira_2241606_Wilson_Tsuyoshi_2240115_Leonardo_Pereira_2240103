@@ -1,4 +1,4 @@
-﻿using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties;
+﻿using Servidor.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -32,12 +32,11 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models
                     this.profilePicture = ms.ToArray();
                 }
             }
-            else
-            {
+            else {
                 this.profilePicture = profilePicture;
             }
 
-
+                
         }
         public Usuario(string username, string passwordHash, byte[] saltedPasswordHash, byte[] salt)
         {
@@ -46,6 +45,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models
             this.saltedPasswordHash = saltedPasswordHash;
             this.salt = salt;
         }
+
         public Usuario() { }
     }
 }
