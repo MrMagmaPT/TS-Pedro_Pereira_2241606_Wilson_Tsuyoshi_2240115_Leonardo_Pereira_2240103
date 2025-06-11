@@ -22,7 +22,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
         SqlConnection connection = new SqlConnection(); // Conexão com a base de dados
 
         //ControllerS
-        ControllerFormRegistar ControllerRegistar = new Controllers.ControllerFormRegistar();
+        ControllerFormRegistar controllerRegistar = new Controllers.ControllerFormRegistar();
         Hash Hash = new Hash();
         Salt Salt = new Salt();
         SaltedHashText SaltedHashText = new SaltedHashText();
@@ -108,7 +108,17 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
 
                                 Usuario usuario = new Usuario(username, passwordHash, saltedPasswordHash, salt, profPic);
 
-                                ControllerRegistar.Registar(usuario);
+                                //converter usuario para array de byte
+                                byte[] userBytes = ControllerSerializar.SerializaParaArrayBytes<Usuario>(usuario);
+
+                                //enviar encriptado o array de bytes conhecido como usuario para o servidor
+
+
+
+
+
+
+                                controllerRegistar.Registar(usuario);
                             }
                         }
                     }
@@ -124,5 +134,19 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                 throw new Exception("Error while registering user: " + ex.Message, ex);
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -70,6 +70,7 @@
     <Compile Include="Controllers\ControllerFormRegistar.cs" />
     <Compile Include="Controllers\ControllerFormServer.cs" />
     <Compile Include="Controllers\ControllerHashAndSalt.cs" />
+    <Compile Include="Controllers\ControllerSerializar.cs" />
     <Compile Include="FormRegistar.cs">
       <SubType>Form</SubType>
     </Compile>

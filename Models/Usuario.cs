@@ -33,7 +33,6 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models
 
                 
         }
-
         public Usuario(string username, string passwordHash, byte[] saltedPasswordHash, byte[] salt)
         {
             this.username = username;
@@ -41,5 +40,10 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models
             this.saltedPasswordHash = saltedPasswordHash;
             this.salt = salt;
         }
+
+
+
+
+
     }
 }

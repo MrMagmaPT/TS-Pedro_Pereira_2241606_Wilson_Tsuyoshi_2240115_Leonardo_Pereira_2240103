@@ -40,6 +40,12 @@ namespace Servidor
             NetworkStream ns = cliente.GetStream();
             ProtocolSI protocolo = new ProtocolSI();
 
+
+            //[Username][chave publica][l][username][saltedPasswordHash]
+            //[Username][chave publica][r][username][PasswordHash][saltedPasswordHash][salt][ProfPic]
+            //[Username][chave publica][m][mensage]
+            // apanhar o username dentro da [] (desencriptada)
+
             string username = "";
 
             try
