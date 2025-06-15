@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Data.SqlClient;
 using System.IO;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
 {
@@ -94,13 +95,11 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                 {
                     return null; // Se a password não corresponder, retorna false
                 }
-                
-                throw new NotImplementedException();
             }
             catch (Exception e) 
             {
                 connection.Close(); // Garante que a conexão é fechada, mesmo em caso de erro
-                throw new Exception("Error while trying to access an user", e);
+                return null; // Retorna null em caso de erro
             }
             
         }

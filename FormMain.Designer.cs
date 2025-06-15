@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.btnEnviarMsg = new System.Windows.Forms.Button();
             this.tbxMsg = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txbChat = new System.Windows.Forms.TextBox();
             this.lbNome = new System.Windows.Forms.Label();
             this.lbServerIP = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -59,13 +59,14 @@
             this.tbxMsg.Size = new System.Drawing.Size(560, 67);
             this.tbxMsg.TabIndex = 1;
             // 
-            // textBox1
+            // txbChat
             // 
-            this.textBox1.Location = new System.Drawing.Point(27, 74);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(560, 275);
-            this.textBox1.TabIndex = 3;
+            this.txbChat.Location = new System.Drawing.Point(27, 74);
+            this.txbChat.Multiline = true;
+            this.txbChat.Name = "txbChat";
+            this.txbChat.ReadOnly = true;
+            this.txbChat.Size = new System.Drawing.Size(560, 275);
+            this.txbChat.TabIndex = 3;
             // 
             // lbNome
             // 
@@ -129,12 +130,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbServerIP);
             this.Controls.Add(this.lbNome);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txbChat);
             this.Controls.Add(this.tbxMsg);
             this.Controls.Add(this.btnEnviarMsg);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "FormMain";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbUserImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -144,7 +147,7 @@
         #endregion
         private System.Windows.Forms.Button btnEnviarMsg;
         private System.Windows.Forms.TextBox tbxMsg;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txbChat;
         private System.Windows.Forms.Label lbNome;
         private System.Windows.Forms.Label lbServerIP;
         private System.Windows.Forms.Label label1;

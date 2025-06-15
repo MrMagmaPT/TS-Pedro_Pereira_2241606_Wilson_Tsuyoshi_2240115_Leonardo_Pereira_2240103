@@ -78,31 +78,20 @@ namespace Projeto_TS
 
             ns.Write(packet, 0, packet.Length); // Envia o comando de login para o servidor
 
-            while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK)
+            while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
             {
                 // Lê a resposta do servidor
                 ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
                 byte[] profPic = protocolSI.GetData(); // Obtém os dados da resposta da stream
-                //extrai os bytes da imajem da stream
-                
 
-                if (profPic == null)
-                {
-                    MessageBox.Show("Erro no login", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else if (Encoding.UTF8.GetString(profPic) == "0")
-                {
-                    //what
-                } else
-                {
+                if (profPic[0] != 48) {
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     formMain = new FormMain(username, profPic, client, ns, protocolSI);
                     formMain.Show(); // Mostra o formulário principal
-
-                    
                     this.Hide(); // Esconde o formulário de login
+                    return;
                 }
+                
             };
         }
     }
