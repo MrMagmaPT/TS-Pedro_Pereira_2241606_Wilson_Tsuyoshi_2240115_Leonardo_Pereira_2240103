@@ -46,24 +46,3 @@ namespace Servidor
         }
     }
 }
-
-/*
-if (protSI.GetCmdType() == ProtocolSICmdType.DATA)
-{
-    byte[] dados = protSI.GetData();
-    switch (dados[0])
-    {
-        case 1:
-                            
-            break;
-        case 2:
-            //comecone
-            break;
-        case 3:
-            //comcepica
-            break;
-        default:
-            throw new Exception("Tipo de comando desconhecido.");
-    }
-}
-*/

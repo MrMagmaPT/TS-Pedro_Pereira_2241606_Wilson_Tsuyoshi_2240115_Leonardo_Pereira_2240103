@@ -158,8 +158,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txbUsername;
-        private System.Windows.Forms.TextBox txbPassword;
+        public System.Windows.Forms.TextBox txbUsername;
+        public System.Windows.Forms.TextBox txbPassword;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Label label2;

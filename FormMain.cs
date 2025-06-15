@@ -30,16 +30,24 @@ namespace Projeto_TS
         ProtocolSI protSI;
         TcpClient client;
         RSACryptoServiceProvider rsa;
-
+        //=====================================================================================
+        // Variável para armazenar o provedor RSA para verificação de assinatura
+        private RSACryptoServiceProvider rsaVerify;
+        //=====================================================================================
         Thread tReceber;
 
         string _Username;
         Image _ProfilePicture;
 
+        FormLogin loginform;
 
-        public FormMain(string username, byte[] profPic, TcpClient clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld)
+
+        public FormMain(string username, byte[] profPic, TcpClient clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld, FormLogin formLogin)
         {
             InitializeComponent();
+            //instancia o form login
+            loginform = formLogin;
+
             //inicializou/instanciou o endpoint que é a combinação do ip da propria maquina por isso loopback + PORT
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, PORT);
 
@@ -48,9 +56,23 @@ namespace Projeto_TS
 
             //Passagem de informação
             networkStream = nsOld;
-                
+
+            //=====================================================================================
+
+            // Inicializa o provedor RSA com uma chave de 2048 bits
             rsa = new RSACryptoServiceProvider(2048);
 
+            // Obtém a chave pública em formato XML(false devolve a chave publica)
+            string publicKey = rsa.ToXmlString(false);
+
+
+            // Inicializa o provedor RSA para verificação
+            rsaVerify = new RSACryptoServiceProvider(2048);
+
+            // Carrega a chave pública no provedor de verificação
+            rsaVerify.FromXmlString(publicKey);
+
+            //=====================================================================================
             protSI = protocolSIOld;
 
             Image profilePicture = null; //converte o byte[] para uma imagem
@@ -76,7 +98,7 @@ namespace Projeto_TS
             running = true;
             tReceber = new Thread(ReceberMensagens);
             tReceber.IsBackground = true;
-            
+            tReceber.Start();
         }
 
 
@@ -181,7 +203,6 @@ namespace Projeto_TS
                         {
                             continue;
                         }
-                        // Se for outro comando, ignore ou trate conforme necessário
                     }
                     catch (Exception ex)
                     {
@@ -200,17 +221,21 @@ namespace Projeto_TS
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             byte[] EOT = protSI.Make(ProtocolSICmdType.EOT);
-            networkStream.Write(EOT, 0, EOT.Length);
-            running = false; // Define a flag para parar o loop de recebimento de mensagens
-            //quando receber o ack do servidor depois do eot fecha as coneões e o formulário
-            while (protSI.GetCmdType() != ProtocolSICmdType.ACK)
-            {
-                // Lê a resposta do servidor
+            if (networkStream.CanWrite == true) { //verificamos se ainda é possivel escrever no ns
+                networkStream.Write(EOT, 0, EOT.Length);
+
                 networkStream.Read(protSI.Buffer, 0, protSI.Buffer.Length);
+                running = false;
             }
+
+            // Define a flag para parar o loop de recebimento de mensagens
+            //quando receber o ack do servidor depois do eot fecha as coneões e o formulário
+
             networkStream.Close(); // Fecha o NetworkStream
             client.Close();
-            
+            loginform.txbPassword.Text = "";
+            loginform.txbUsername.Text = "";
+            loginform.Show();
         }
 
         private void FormMain_Load(object sender, EventArgs e)

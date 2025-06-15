@@ -16,7 +16,7 @@ namespace Servidor.Models
     {
         //Lista de clientes conectados
         static List<TcpClient> clientes = new List<TcpClient>();
-
+        static List<byte[]> strings = new List<byte[]>();
         private TcpClient ultimoCliente;
 
         string username;

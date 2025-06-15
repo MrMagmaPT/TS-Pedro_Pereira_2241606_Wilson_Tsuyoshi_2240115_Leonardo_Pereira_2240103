@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
 using static Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models.MessageTypeEnum;
+using System.Security.Cryptography;
 
 namespace Projeto_TS
 {
@@ -23,10 +24,24 @@ namespace Projeto_TS
         TcpClient client;
         private const int PORT = 12345;
 
+        //=====================================================================================
+
+        //instacia crypto ervice provider
+        RSACryptoServiceProvider rsa;
+
+        //=====================================================================================
 
         public FormLogin()
         {
             InitializeComponent();
+
+            // Inicializa o provedor RSA com uma chave de 2048 bits
+            rsa = new RSACryptoServiceProvider(2048);
+
+            // Obtém a chave pública em formato XML(false devolve a chave publica)
+            string publicKey = rsa.ToXmlString(false);
+
+
         }
 
         private void btnRegistar_Click(object sender, EventArgs e)
@@ -86,12 +101,11 @@ namespace Projeto_TS
 
                 if (profPic[0] != 48) {
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    formMain = new FormMain(username, profPic, client, ns, protocolSI);
+                    formMain = new FormMain(username, profPic, client, ns, protocolSI, this);
                     formMain.Show(); // Mostra o formulário principal
                     this.Hide(); // Esconde o formulário de login
                     return;
                 }
-                
             };
         }
     }
