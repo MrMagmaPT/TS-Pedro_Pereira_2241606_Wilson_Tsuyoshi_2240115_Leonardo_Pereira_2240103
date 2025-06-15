@@ -10,14 +10,21 @@ using System.Threading.Tasks;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
 using Microsoft.Win32;
 using System.Diagnostics.Eventing.Reader;
+using System.Runtime.Remoting;
+using System.Security.Cryptography;
+using System.IO;
+
 namespace Servidor.Models
 {
     class ClientHandler
     {
         //Lista de clientes conectados
-        static List<TcpClient> clientes = new List<TcpClient>();
-        static List<byte[]> strings = new List<byte[]>();
-        private TcpClient ultimoCliente;
+        public static List<ClientInfo> clientes = new List<ClientInfo>();
+        private string UltimachavePub = null;
+        private TcpClient ultimoCliente = null;
+        private byte[] chaveSimetrica = null;
+
+        AesCryptoServiceProvider aes;
 
         string username;
 
@@ -55,13 +62,16 @@ namespace Servidor.Models
                     //ENVIA DADOS
                     case ProtocolSICmdType.DATA:
 
-                        byte[] dados = protocolSI.GetData();
+                        byte[] dadosCifrados = protocolSI.GetData(); //recebe os dados cifradso
 
-                        switch (dados[0])
+                        byte[] dadosCifradosSemTipo = dadosCifrados.Skip(1).ToArray();
+
+
+                        switch (dadosCifrados[0])
                         {
                             case 1:
-                                //obter dados sem o primero byte
-                                byte[] dadosRegistarSemTipo = dados.Skip(1).ToArray(); // Pula o primeiro byte que é o tipo de comando
+                                //decifrar a mensagem e meter na variavel dados[]
+                                byte[] dadosRegistarSemTipo = decifrarMensagemRecebida(dadosCifradosSemTipo);
 
                                 Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosRegistarSemTipo); // Desserializa os dados recebidos para um objeto Usuario
                                 string mensagem = controllerRegistar.Registar(user); //enviar os dados do usuario para o controller de registo e obter a mensagem de resposta
@@ -77,8 +87,11 @@ namespace Servidor.Models
                                 break;
                             case 2:
                                 byte[] respostaProfilePic = null;
-                                //obter dados sem o primero byte
-                                byte[] dadosLoginSemTipo = dados.Skip(1).ToArray();
+
+                                string dadoscifradosloginsemtipo = Convert.ToBase64String(dadosCifradosSemTipo);
+
+                                //decifrar a mensagem
+                                byte[] dadosLoginSemTipo = decifrarDadosLogin(dadosCifradosSemTipo, chaveSimetrica);
 
                                 //Converte os dados recebidos em uma string
                                 string dadosLoginString = Encoding.UTF8.GetString(dadosLoginSemTipo);
@@ -105,17 +118,15 @@ namespace Servidor.Models
                                     //Se o utilizador existir, envia a imagem do perfil
                                     Console.WriteLine("[Servidor] - Login bem sucedido para o cliente: " + username);
                                     respostaProfilePic = protocolSI.Make(ProtocolSICmdType.DATA, profPic); // Envia a imagem do perfil
-
-                                    clientes.Add(ultimoCliente); //Adiciona o cliente à lista de clientes conectados
+                                    ClientInfo cliente_novo = new ClientInfo(UltimachavePub, ultimoCliente, chaveSimetrica);
+                                    clientes.Add(cliente_novo);
                                 }
-
                                 networkStream.Write(respostaProfilePic, 0, respostaProfilePic.Length);
-
                                 break;
                                 
                             case 3:
-                                //obter dados sem o primero byte
-                                byte[] mensagemSemTipo = dados.Skip(1).ToArray();
+                                //decifrar a mensagem e meter na variavel dados[]
+                                byte[] mensagemSemTipo = decifrarMensagemRecebida(dadosCifradosSemTipo);
 
                                 //Converte os dados recebidos em uma string
                                 string mensagemString = "[" + username + "] - " + Encoding.UTF8.GetString(mensagemSemTipo);
@@ -125,6 +136,40 @@ namespace Servidor.Models
 
                                 EnviarParaTodos(mensagemString); //Envia a mensagem para todos os clientes conectados
                                 break;
+
+                            case 4:
+                                //recebe a chave publica
+                                byte[] chavePubSemTipo = dadosCifrados.Skip(1).ToArray(); 
+                                //aqi usamos os dados cifrados diretamente, porque o caso 4 nao manda dados cifrados (manda a chave publica)
+
+                                //coverte para string
+                                UltimachavePub = Encoding.UTF8.GetString(chavePubSemTipo);
+                                byte[] chaveSimetricaAES;
+                                //criar chave simmetrica
+                                using (Aes aes = Aes.Create())
+                                {
+                                    aes.GenerateKey();
+                                    chaveSimetricaAES = aes.Key; // Chave AES (32 bytes para AES-256)
+                                }
+
+                                //encriptar a chave simetrica com a chave publica
+                                byte[] chaveSimetricaCifrada;
+
+                                chaveSimetrica = chaveSimetricaAES;
+                                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+                                {
+                                    rsa.FromXmlString(UltimachavePub); // Carrega a chave pública do cliente
+                                    chaveSimetricaCifrada = rsa.Encrypt(chaveSimetrica, true); // Cifra com RSA
+                                }
+
+
+                                //Envia a chave simétrica cifrada para o cliente
+                                byte[] respostaChave = protocolSI.Make(ProtocolSICmdType.DATA, chaveSimetricaCifrada);
+                                networkStream.Write(respostaChave, 0, respostaChave.Length);
+
+                                Console.WriteLine($"[Servidor] - Chave simétrica gerada e enviada para o cliente.");
+                                break;
+
                             default:
                                 throw new Exception("Tipo de comando desconhecido.");
                         }
@@ -140,34 +185,161 @@ namespace Servidor.Models
                         break;
                 }
             }
-            //ermina os recursos quando termina a transmissão
+            //termina os recursos quando termina a transmissão
             networkStream.Close();
             ultimoCliente.Close();
+
+            //passar pela lista de clientes e encontrar o cliente cujo o tcp coincide com UltimoCliente e quando encontrar elemina esse dado da lista de clientes
+            foreach (ClientInfo dadosCliente in clientes)
+            {
+                if (dadosCliente.cliente == ultimoCliente)
+                {
+                    clientes.Remove(dadosCliente);
+                    break;
+                }
+            }
+
         }
 
         public void EnviarParaTodos(string mensagem)
         {
             ProtocolSI protocolSI = new ProtocolSI();
-            byte[] mensagemBytes = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
 
-            // usamos uma copia da lista para evitar problemas de concorrência ou modificações a lista enquanto iteramos sobre a mesma
-            var clientesCopy = clientes.ToList();
+            byte[] mensagemBytes = UTF8Encoding.UTF8.GetBytes(mensagem);
 
-            foreach (TcpClient cliente in clientesCopy)
+            foreach (ClientInfo dadosCliente in clientes)
             {
                 try
                 {
-                    NetworkStream ns = cliente.GetStream();
-                    ns.Write(mensagemBytes, 0, mensagemBytes.Length);
+                    NetworkStream ns = dadosCliente.cliente.GetStream();
+
+                    // encriptar a mensagem
+                    byte[] mensagemBytesCifrados = cifrarMensagem(mensagemBytes, dadosCliente);
+
+                    //transforma em packet de dados
+                    byte[] packetCifrado = protocolSI.Make(ProtocolSICmdType.DATA, mensagemBytesCifrados);
+
+                    //enviar a mensagem cifrada
+                    ns.Write(packetCifrado, 0, packetCifrado.Length);
                 }
                 catch (Exception)
-                { 
+                {
                     //Caso nao chegue a mensagem ao cliente, remove o cliente da lista e fecha a conexão, considera tambem como cliente desconectado
-                    clientes.Remove(cliente);
                     Console.WriteLine("[Servidor] - A terminar a ligação com o cliente: " + username);
-                    cliente.Close();
+                    dadosCliente.cliente.Close();
+                    clientes.Remove(dadosCliente);
                 }
             }
         }
+        public byte[] cifrarMensagem(byte[] mensagem,ClientInfo cliente)
+        {
+            //encriptar mensagem
+            byte[] mensagemCifrada;
+            using (Aes aes = Aes.Create())
+            {
+                // Configurar a chave AES
+                aes.Key = cliente.chaveSimetrica;
+
+                // Criar o cifrador
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Escrever o IV primeiro (necessário para decifração)
+                    ms.Write(aes.IV, 0, aes.IV.Length);
+
+                    // Cifrar os dados
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(mensagem, 0, mensagem.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    return mensagemCifrada = ms.ToArray();
+                }
+            }
+        }
+
+        public byte[] decifrarMensagemRecebida(byte[] dadosCifrados)
+        {
+            try
+            {
+                byte[] iv = new byte[16];
+                Buffer.BlockCopy(dadosCifrados, 0, iv, 0, 16);
+
+                byte[] dadosCifradosSemIV = new byte[dadosCifrados.Length - 16];
+                Buffer.BlockCopy(dadosCifrados, 16, dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+
+                byte[] chaveSimetricaParaDecifrar = ObterChaveSimetricaCliente(ultimoCliente);
+                if (chaveSimetricaParaDecifrar == null)
+                    return dadosCifrados;
+
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = chaveSimetricaParaDecifrar;
+                    aes.IV = iv;
+
+                    using (MemoryStream ms = new MemoryStream())
+                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+                        cs.FlushFinalBlock();
+                        return ms.ToArray();
+                    }
+                }
+            }
+            catch (CryptographicException ex)
+            {
+                Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                return dadosCifrados;
+            }
+        }
+
+        public byte[] decifrarDadosLogin(byte[] dadosCifrados,byte[] chaveSimetricaLogin)
+        {
+            try
+            {
+                byte[] iv = new byte[16];
+                Buffer.BlockCopy(dadosCifrados, 0, iv, 0, 16);
+
+                byte[] dadosCifradosSemIV = new byte[dadosCifrados.Length - 16];
+                Buffer.BlockCopy(dadosCifrados, 16, dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+
+                byte[] chaveSimetricaParaDecifrar = chaveSimetricaLogin;
+                if (chaveSimetricaParaDecifrar == null)
+                    return dadosCifrados;
+
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = chaveSimetricaParaDecifrar;
+                    aes.IV = iv;
+
+                    using (MemoryStream ms = new MemoryStream())
+                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(dadosCifradosSemIV, 0, dadosCifradosSemIV.Length); //ele aqui ta a decodificar sem problema
+                        cs.FlushFinalBlock();
+                        return ms.ToArray();
+                    }
+                }
+            }
+            catch (CryptographicException ex)
+            {
+                Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                return dadosCifrados;
+            }
+        }
+
+        private byte[] ObterChaveSimetricaCliente(TcpClient cliente)
+        {
+            foreach (ClientInfo dadosCliente in clientes)
+            {
+                if (dadosCliente.cliente == cliente)
+                {
+                    return dadosCliente.chaveSimetrica;
+                }
+            }
+            return null;
+        }
+
     }
 }

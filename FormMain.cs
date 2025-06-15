@@ -41,8 +41,9 @@ namespace Projeto_TS
 
         FormLogin loginform;
 
+        ClientInfo clienteCompleto;
 
-        public FormMain(string username, byte[] profPic, TcpClient clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld, FormLogin formLogin)
+        public FormMain(string username, byte[] profPic, ClientInfo clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld, FormLogin formLogin)
         {
             InitializeComponent();
             //instancia o form login
@@ -52,10 +53,12 @@ namespace Projeto_TS
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, PORT);
 
             //criação do cliente e conecta ao endpoint 
-            client = clientOld;
+            client = clientOld.cliente;
+            clienteCompleto = clientOld;
 
             //Passagem de informação
             networkStream = nsOld;
+
 
             //=====================================================================================
 
@@ -120,14 +123,19 @@ namespace Projeto_TS
                     {
                         byte[] messageBytes = Encoding.UTF8.GetBytes(msg); //Converte a mensagem para bytes
 
+                        //cifra a mensagem
+                        byte[] packetCifrado = cifrarMensagem(messageBytes, clienteCompleto);
+
+                        //endereça a mensagem
                         MessageTypeEnum messageType = new MessageTypeEnum(); //instanciação do enum de tipo de mensagem
                         MessageTypeEnum.MessageType tipo = MessageTypeEnum.MessageType.SendMessage; //enum de prefixo para registar
 
-                        byte[] mensagemComTipo = messageType.CreateMessage(tipo, messageBytes); //criação da mensagem com o tipo de mensagem e o array de bytes do utilizador
+                        byte[] mensagemComTipo = messageType.CreateMessage(tipo, packetCifrado); //criação da mensagem com o tipo de mensagem e o array de bytes do utilizador
 
                         //Cria o packet que vai fazer o envio da mensagem
                         byte[] packet = protSI.Make(ProtocolSICmdType.DATA, mensagemComTipo);
 
+                        //envia a mensagem
                         networkStream.Write(packet, 0, packet.Length);
 
                         bool ackRecebido = false;
@@ -184,7 +192,13 @@ namespace Projeto_TS
                         // Só processa se for DATA
                         if (cmd == ProtocolSICmdType.DATA)
                         {
-                            string mensagem = protocolSIReceber.GetStringFromData();
+                            byte[] mensagemCifrada = protocolSIReceber.GetData();
+
+                            //decifrar dados recebidos (mensagem)
+                            byte[] mensagemDecifrada = decifrarMensagemRecebida(mensagemCifrada);
+
+                            string mensagem = Encoding.UTF8.GetString(mensagemDecifrada);
+
                             if (mensagem.Contains("["))
                             {
                                 this.Invoke((MethodInvoker)delegate
@@ -208,7 +222,7 @@ namespace Projeto_TS
                     {
                         MessageBox.Show("Erro ao receber mensagens: " + ex.Message);
                     }
-          
+                    
                 }
             }
             catch (Exception ex)
@@ -238,9 +252,68 @@ namespace Projeto_TS
             loginform.Show();
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
+        public byte[] cifrarMensagem(byte[] mensagem, ClientInfo cliente)
         {
-            
+            //encriptar mensagem
+            byte[] mensagemCifrada;
+            using (Aes aes = Aes.Create())
+            {
+                // Configurar a chave AES
+                aes.Key = cliente.chaveSimetrica;
+
+                // Criar o cifrador
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Escrever o IV primeiro (necessário para decifração)
+                    ms.Write(aes.IV, 0, aes.IV.Length);
+
+                    // Cifrar os dados
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(mensagem, 0, mensagem.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    return mensagemCifrada = ms.ToArray();
+                }
+            }
         }
+
+        public byte[] decifrarMensagemRecebida(byte[] dadosCifrados)
+        {
+            try
+            {
+                byte[] iv = new byte[16];
+                Buffer.BlockCopy(dadosCifrados, 0, iv, 0, 16);
+
+                byte[] dadosCifradosSemIV = new byte[dadosCifrados.Length - 16];
+                Buffer.BlockCopy(dadosCifrados, 16, dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+
+                byte[] chaveSimetricaParaDecifrar = clienteCompleto.chaveSimetrica;
+                if (chaveSimetricaParaDecifrar == null)
+                    return dadosCifrados;
+
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = chaveSimetricaParaDecifrar;
+                    aes.IV = iv;
+
+                    using (MemoryStream ms = new MemoryStream())
+                    using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+                        cs.FlushFinalBlock();
+                        return ms.ToArray();
+                    }
+                }
+            }
+            catch (CryptographicException ex)
+            {
+                Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                return dadosCifrados;
+            }
+        }
+
     }
 }

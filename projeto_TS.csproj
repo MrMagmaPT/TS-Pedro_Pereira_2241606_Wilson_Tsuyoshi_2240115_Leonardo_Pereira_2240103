@@ -87,6 +87,7 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientInfo.cs" />
     <Compile Include="Models\MessageTypeEnum.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Program.cs" />

@@ -29,6 +29,10 @@ namespace Projeto_TS
         //instacia crypto ervice provider
         RSACryptoServiceProvider rsa;
 
+        string publicKey;
+
+        string chaveSimetrica;
+
         //=====================================================================================
 
         public FormLogin()
@@ -39,9 +43,7 @@ namespace Projeto_TS
             rsa = new RSACryptoServiceProvider(2048);
 
             // Obtém a chave pública em formato XML(false devolve a chave publica)
-            string publicKey = rsa.ToXmlString(false);
-
-
+            publicKey = rsa.ToXmlString(false);
         }
 
         private void btnRegistar_Click(object sender, EventArgs e)
@@ -58,41 +60,108 @@ namespace Projeto_TS
         {
             string password = txbPassword.Text;
             string username = txbUsername.Text;
+            MessageTypeEnum messageType = new MessageTypeEnum();
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Por favor, preencha todos os campos.");
                 return;
             }
-            //Gera Hash da password
+
             string passwordHash = Hash.HashPassword(password); // Gera o hash da senha com um salt de 1000 iterações
 
 
-            //Conecta ao servidor para fazer o login
-            IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT); // Define o ponto final do servidor (localhost e porta 12345)
+
+            //Conecta ao servidor para fazer o login e a chave simetrica/publica
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, PORT); //define o ponto final do servidor (localhost e porta 12345)
 
             client = new TcpClient(); // Cria uma nova instância do cliente TCP
 
-            client.Connect(endpoint); // Conecta ao servidor
+            client.Connect(endpoint); //conecta o cliente ao servidor
 
             ns = client.GetStream(); // Obtém o network stream do cliente para enviar e receber dados
             protocolSI = new ProtocolSI(); // Instanciação do protocolo SI
 
-            // Cria o comando de login
 
-            // Create the login string
+            //enviar chave publica - servidor
+            byte[] pubKeyBytes = Encoding.UTF8.GetBytes(publicKey);
+
+            MessageTypeEnum.MessageType tipoChave = MessageTypeEnum.MessageType.SendPublicKey;
+
+            byte[] chavePubComTipo = messageType.CreateMessage(tipoChave, pubKeyBytes);
+
+            byte[] packetChave = protocolSI.Make(ProtocolSICmdType.DATA, chavePubComTipo);
+
+            //Envia a chave publica para o servidor
+            ns.Write(packetChave, 0, packetChave.Length);
+
+
+
+
+            // recebe a chave simetrica do servidor
+            ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+            //ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
+            byte[] chaveSimetricaCifrada = protocolSI.GetData(); //obtem a chave simetrica cifrada com a chave publica
+
+
+            // 1. Decifrar chave simétrica usando chave privada RSA
+            byte[] chaveSimetricaDecifrada;
+            try
+            {
+
+                chaveSimetricaDecifrada = rsa.Decrypt(chaveSimetricaCifrada, true);
+
+                // 2. Guardar a chave simétrica decifrada (em Base64 para fácil armazenamento)
+                chaveSimetrica = Convert.ToBase64String(chaveSimetricaDecifrada);
+
+            }
+            catch (CryptographicException ex)
+            {
+                MessageBox.Show("Erro ao decifrar a chave simétrica: " + ex.Message);
+                return;
+            }
+
+            //Cria a string de login e enviar
             string loginstring = username + "\n" + passwordHash;
 
             byte[] loginBytes = Encoding.UTF8.GetBytes(loginstring);
 
-            MessageTypeEnum messageType = new MessageTypeEnum();
-            MessageTypeEnum.MessageType tipo = MessageTypeEnum.MessageType.Login;
-            byte[] mensagemComTipo = messageType.CreateMessage(tipo, loginBytes);
+            
+            //encriptar mensagem
+            byte[] mensagemCifrada;
+            using (Aes aes = Aes.Create())
+            {
+                // Configurar a chave AES (convertida de Base64 para bytes)
+                aes.Key = Convert.FromBase64String(chaveSimetrica);
 
-            byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, mensagemComTipo);
 
-            ns.Write(packet, 0, packet.Length); // Envia o comando de login para o servidor
+                // Criar o cifrador (usará configurações padrão: CBC mode e PKCS7 padding)
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Escrever o IV primeiro (necessário para decifração)
+                    ms.Write(aes.IV, 0, aes.IV.Length);
 
+                    // Cifrar os dados
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(loginBytes, 0, loginBytes.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    mensagemCifrada = ms.ToArray();
+                }
+            }
+
+            MessageTypeEnum.MessageType tipoLogin = MessageTypeEnum.MessageType.Login;
+            byte[] mensagemComTipoCifrada = messageType.CreateMessage(tipoLogin, mensagemCifrada);
+
+            byte[] packetLogin = protocolSI.Make(ProtocolSICmdType.DATA, mensagemComTipoCifrada);
+
+            //Envia o comando de login para o servidor
+            ns.Write(packetLogin, 0, packetLogin.Length); 
+
+            // recebe a confimação do login (ou rejeição) baseado naprofile pic
             while (protocolSI.GetCmdType() != ProtocolSICmdType.ACK || protocolSI.GetCmdType() != ProtocolSICmdType.EOT)
             {
                 // Lê a resposta do servidor
@@ -101,7 +170,10 @@ namespace Projeto_TS
 
                 if (profPic[0] != 48) {
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    formMain = new FormMain(username, profPic, client, ns, protocolSI, this);
+
+                    ClientInfo clienteCompleto = new ClientInfo(publicKey, client, Convert.FromBase64String(chaveSimetrica));
+
+                    formMain = new FormMain(username, profPic, clienteCompleto, ns, protocolSI, this);
                     formMain.Show(); // Mostra o formulário principal
                     this.Hide(); // Esconde o formulário de login
                     return;
