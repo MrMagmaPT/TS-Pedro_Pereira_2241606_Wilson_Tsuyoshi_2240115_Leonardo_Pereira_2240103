@@ -170,7 +170,6 @@ namespace Servidor.Models
 
                                     RSACryptoServiceProvider rsaVerify = new RSACryptoServiceProvider();
                                     rsaVerify.FromXmlString(chavePublicaCliente);
-                                    Console.WriteLine(Convert.ToBase64String(mensagemOriginal));
 
                                     // 6. Verificar assinatura
                                     bool assinaturaValida = rsaVerify.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA256"), assinatura);

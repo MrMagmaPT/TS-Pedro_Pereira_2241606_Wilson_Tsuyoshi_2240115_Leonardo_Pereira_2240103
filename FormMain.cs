@@ -97,6 +97,8 @@ namespace Projeto_TS
 
         private void btnEnviarMsg_Click(object sender, EventArgs e)
         {
+
+            lblPalavras.Text = "";
             if (string.IsNullOrWhiteSpace(tbxMsg.Text)) //verifica se a textbox está vazia ou só com espaços em branco
             {
                 MessageBox.Show("Por favor, escreva uma mensagem antes de enviar!"); //se estiver, mostra uma mensagem de erro
@@ -137,8 +139,6 @@ namespace Projeto_TS
                             ms.Write(messageBytes, 0, messageBytes.Length);           // mensagem original
                             messageBytes = ms.ToArray();
                         }
-
-                       
 
                         //cifra a mensagem
                         byte[] packetCifrado = cifrarMensagem(messageBytes, clienteCompleto);
@@ -341,5 +341,25 @@ namespace Projeto_TS
             }
         }
 
+        private void tbxMsg_TextChanged(object sender, EventArgs e)
+        {
+            int charCount = Encoding.UTF8.GetByteCount(tbxMsg.Text);
+            int charRestantes = 999 - charCount;
+            if (charRestantes < 50)
+            {
+                lblPalavras.Text = "Characteres restantes: " + charRestantes;
+            }else
+            {
+                lblPalavras.Text = "";
+            }
+            if (charRestantes < 0)
+            {
+                btnEnviarMsg.Enabled = false;
+            }
+            else
+            {
+                btnEnviarMsg.Enabled = true;
+            }
+        }
     }
 }
