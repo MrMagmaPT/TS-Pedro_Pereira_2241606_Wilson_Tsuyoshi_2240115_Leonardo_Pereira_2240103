@@ -174,7 +174,7 @@ namespace Projeto_TS
 
                     ClientInfo clienteCompleto = new ClientInfo(publicKey, client, Convert.FromBase64String(chaveSimetrica));
 
-                    formMain = new FormMain(username, profPic, clienteCompleto, ns, protocolSI, this);
+                    formMain = new FormMain(username, profPic, clienteCompleto, ns, protocolSI, this, rsa);
                     formMain.Show(); // Mostra o formulário principal
                     this.Hide(); // Esconde o formulário de login
                     return;

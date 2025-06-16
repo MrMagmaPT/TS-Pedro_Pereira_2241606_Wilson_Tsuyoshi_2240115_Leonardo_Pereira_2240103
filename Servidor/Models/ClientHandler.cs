@@ -34,6 +34,11 @@ namespace Servidor.Models
         //instancia o controller de login
         ControllerFormLogin controllerLogin = new ControllerFormLogin();
 
+
+        //Assinatura
+
+
+
         public ClientHandler(TcpClient client)
         {
             this.ultimoCliente = client;
@@ -130,16 +135,58 @@ namespace Servidor.Models
                                 break;
                                 
                             case 3:
-                                //decifrar a mensagem e meter na variavel dados[]
+                                // Decifrar a mensagem recebida
                                 byte[] mensagemSemTipo = decifrarMensagemRecebida(dadosCifradosSemTipo);
 
-                                //Converte os dados recebidos em uma string
-                                string mensagemString = "[" + username + "] - " + Encoding.UTF8.GetString(mensagemSemTipo);
+                                // Usar MemoryStream e BinaryReader para separar assinatura e mensagem
+                                using (MemoryStream ms = new MemoryStream(mensagemSemTipo))
+                                using (BinaryReader br = new BinaryReader(ms))
+                                {
+                                    // 1. Ler o tamanho da assinatura (4 bytes)
+                                    int assinaturaLength = br.ReadInt32();
 
-                                //mostra a mensagem recebida no cmd
-                                addToLogAndMessage(mensagemString);
+                                    // 2. Ler a assinatura
+                                    byte[] assinatura = br.ReadBytes(assinaturaLength);
 
-                                EnviarParaTodos(mensagemString); //Envia a mensagem para todos os clientes conectados
+                                    // 3. Ler a mensagem original
+                                    byte[] mensagemOriginal = br.ReadBytes((int)(ms.Length - ms.Position));
+
+                                    // 4. Calcular hash da mensagem original
+                                    byte[] hash;
+                                    using (SHA256 sha256 = SHA256.Create())
+                                        hash = sha256.ComputeHash(mensagemOriginal);
+
+                                    // 5. Obter a chave pública do cliente
+                                    string chavePublicaCliente = UltimachavePub;
+
+                                    foreach (var cli in clientes)
+                                    {
+                                        if (cli.cliente == ultimoCliente)
+                                        {
+                                            chavePublicaCliente = cli.pubkey;
+                                            break;
+                                        }
+                                    }
+
+                                    RSACryptoServiceProvider rsaVerify = new RSACryptoServiceProvider();
+                                    rsaVerify.FromXmlString(chavePublicaCliente);
+                                    Console.WriteLine(Convert.ToBase64String(mensagemOriginal));
+
+                                    // 6. Verificar assinatura
+                                    bool assinaturaValida = rsaVerify.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA256"), assinatura);
+
+                                    if (assinaturaValida)
+                                    {
+                                        string mensagemString = "[" + username + "] - " + Encoding.UTF8.GetString(mensagemOriginal);
+                                        addToLogAndMessage(mensagemString);
+                                        EnviarParaTodos(mensagemString);
+                                    }
+                                    else
+                                    {
+                                        addToLogAndMessage("[Servidor] - Assinatura digital inválida para mensagem de " + username);
+                                        // Não retransmitir a mensagem
+                                    }
+                                }
 
                                 ack = protocolSI.Make(ProtocolSICmdType.ACK);
                                 networkStream.Write(ack, 0, ack.Length);
@@ -152,6 +199,7 @@ namespace Servidor.Models
 
                                 //coverte para string
                                 UltimachavePub = Encoding.UTF8.GetString(chavePubSemTipo);
+
                                 byte[] chaveSimetricaAES;
                                 //criar chave simmetrica
                                 using (Aes aes = Aes.Create())
@@ -381,5 +429,11 @@ namespace Servidor.Models
                 sw.WriteLine(dataHoraAtual + " " + mensagem);
             }
         }
+    
+       
+
+
+
+
     }
 }

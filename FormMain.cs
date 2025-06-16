@@ -31,8 +31,8 @@ namespace Projeto_TS
         TcpClient client;
         RSACryptoServiceProvider rsa;
         //=====================================================================================
-        // Variável para armazenar o provedor RSA para verificação de assinatura
-        private RSACryptoServiceProvider rsaVerify;
+        // RSA para assinar
+        private RSACryptoServiceProvider rsaSign;
         //=====================================================================================
         Thread tReceber;
 
@@ -43,7 +43,7 @@ namespace Projeto_TS
 
         ClientInfo clienteCompleto;
 
-        public FormMain(string username, byte[] profPic, ClientInfo clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld, FormLogin formLogin)
+        public FormMain(string username, byte[] profPic, ClientInfo clientOld, NetworkStream nsOld, ProtocolSI protocolSIOld, FormLogin formLogin, RSACryptoServiceProvider rsaPriv)
         {
             InitializeComponent();
             //instancia o form login
@@ -62,18 +62,8 @@ namespace Projeto_TS
 
             //=====================================================================================
 
-            // Inicializa o provedor RSA com uma chave de 2048 bits
-            rsa = new RSACryptoServiceProvider(2048);
-
-            // Obtém a chave pública em formato XML(false devolve a chave publica)
-            string publicKey = rsa.ToXmlString(false);
-
-
-            // Inicializa o provedor RSA para verificação
-            rsaVerify = new RSACryptoServiceProvider(2048);
-
-            // Carrega a chave pública no provedor de verificação
-            rsaVerify.FromXmlString(publicKey);
+            //instancia a chave publica
+            rsaSign = rsaPriv;
 
             //=====================================================================================
             protSI = protocolSIOld;
@@ -128,6 +118,27 @@ namespace Projeto_TS
                     try
                     {
                         byte[] messageBytes = Encoding.UTF8.GetBytes(msg); //Converte a mensagem para bytes
+
+                        // 1. Assinar a mensagem
+
+                        // 1. Gerar hash da mensagem
+                        byte[] hash;
+                        using (SHA256 sha256 = SHA256.Create())
+                        hash = sha256.ComputeHash(messageBytes);
+
+                        // 2. Assinar a hash
+                        byte[] assinatura = rsaSign.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
+
+                        // 3. Juntar assinatura e mensagem
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            ms.Write(BitConverter.GetBytes(assinatura.Length), 0, 4); // 4 bytes: tamanho da assinatura
+                            ms.Write(assinatura, 0, assinatura.Length);               // assinatura
+                            ms.Write(messageBytes, 0, messageBytes.Length);           // mensagem original
+                            messageBytes = ms.ToArray();
+                        }
+
+                       
 
                         //cifra a mensagem
                         byte[] packetCifrado = cifrarMensagem(messageBytes, clienteCompleto);
@@ -318,6 +329,15 @@ namespace Projeto_TS
             {
                 Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
                 return dadosCifrados;
+            }
+        }
+
+        private byte[] AssinarMensagem(byte[] mensagem)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hash = sha256.ComputeHash(mensagem);
+                return rsaSign.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
             }
         }
 
