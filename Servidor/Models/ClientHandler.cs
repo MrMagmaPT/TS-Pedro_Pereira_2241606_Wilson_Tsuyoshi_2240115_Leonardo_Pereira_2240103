@@ -140,6 +140,9 @@ namespace Servidor.Models
                                 addToLogAndMessage(mensagemString);
 
                                 EnviarParaTodos(mensagemString); //Envia a mensagem para todos os clientes conectados
+
+                                ack = protocolSI.Make(ProtocolSICmdType.ACK);
+                                networkStream.Write(ack, 0, ack.Length);
                                 break;
 
                             case 4:
