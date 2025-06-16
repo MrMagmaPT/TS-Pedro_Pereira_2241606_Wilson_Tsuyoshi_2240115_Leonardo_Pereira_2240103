@@ -1,6 +1,7 @@
 ﻿using EI.SI;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers;
 using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models;
+using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties;
 using System;
 using System.Drawing;
 using System.IO;
@@ -226,6 +227,24 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
 
                     return mensagemCifrada = ms.ToArray();
                 }
+            }
+        }
+
+        private void pbVisibilidade_Click(object sender, EventArgs e)
+        {
+            if (txbPass.PasswordChar == '\0')
+            {
+                //se nao ta censurado censura
+                txbPass.PasswordChar = '*';
+                txbConfirmPass.PasswordChar = '*';
+                pbVisibilidade.Image = Resources.EyeOpen;
+            }
+            else
+            {
+                //se ta censurado descensura
+                txbPass.PasswordChar = '\0';
+                txbConfirmPass.PasswordChar = '\0';
+                pbVisibilidade.Image = Resources.eyeClose;
             }
         }
     }

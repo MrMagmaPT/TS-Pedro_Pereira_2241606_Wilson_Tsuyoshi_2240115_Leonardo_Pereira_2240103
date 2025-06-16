@@ -29,11 +29,10 @@ namespace Projeto_TS
         NetworkStream networkStream;
         ProtocolSI protSI;
         TcpClient client;
-        RSACryptoServiceProvider rsa;
-        //=====================================================================================
+
         // RSA para assinar
         private RSACryptoServiceProvider rsaSign;
-        //=====================================================================================
+
         Thread tReceber;
 
         string _Username;
@@ -59,13 +58,9 @@ namespace Projeto_TS
             //Passagem de informação
             networkStream = nsOld;
 
-
-            //=====================================================================================
-
             //instancia a chave publica
             rsaSign = rsaPriv;
 
-            //=====================================================================================
             protSI = protocolSIOld;
 
             Image profilePicture = null; //converte o byte[] para uma imagem
@@ -104,9 +99,9 @@ namespace Projeto_TS
                 MessageBox.Show("Por favor, escreva uma mensagem antes de enviar!"); //se estiver, mostra uma mensagem de erro
                 return; //e sai da função
             } 
-            else if (Encoding.UTF8.GetByteCount(tbxMsg.Text) > 999) 
+            else if (Encoding.UTF8.GetByteCount(tbxMsg.Text) > 300) 
             {
-                MessageBox.Show("A mensagem nao deve ter mais de 999 caracteres!"); //se estiver, mostra uma mensagem de erro
+                MessageBox.Show("A mensagem nao deve ter mais de 300 caracteres!"); //se estiver, mostra uma mensagem de erro
                 return; //e sai da função
             } 
             else
@@ -332,19 +327,10 @@ namespace Projeto_TS
             }
         }
 
-        private byte[] AssinarMensagem(byte[] mensagem)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hash = sha256.ComputeHash(mensagem);
-                return rsaSign.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
-            }
-        }
-
         private void tbxMsg_TextChanged(object sender, EventArgs e)
         {
             int charCount = Encoding.UTF8.GetByteCount(tbxMsg.Text);
-            int charRestantes = 999 - charCount;
+            int charRestantes = 300 - charCount;
             if (charRestantes < 50)
             {
                 lblPalavras.Text = "Characteres restantes: " + charRestantes;

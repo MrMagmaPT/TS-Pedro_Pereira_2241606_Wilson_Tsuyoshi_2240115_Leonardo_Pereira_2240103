@@ -39,7 +39,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialogImagem = new System.Windows.Forms.OpenFileDialog();
             this.pbUserImage = new System.Windows.Forms.PictureBox();
+            this.pbVisibilidade = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbUserImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbVisibilidade)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -70,7 +72,8 @@
             this.txbPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbPass.Location = new System.Drawing.Point(27, 309);
             this.txbPass.Name = "txbPass";
-            this.txbPass.Size = new System.Drawing.Size(208, 38);
+            this.txbPass.PasswordChar = '*';
+            this.txbPass.Size = new System.Drawing.Size(186, 38);
             this.txbPass.TabIndex = 8;
             // 
             // txbUsername
@@ -88,6 +91,7 @@
             this.txbConfirmPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txbConfirmPass.Location = new System.Drawing.Point(27, 381);
             this.txbConfirmPass.Name = "txbConfirmPass";
+            this.txbConfirmPass.PasswordChar = '*';
             this.txbConfirmPass.Size = new System.Drawing.Size(208, 38);
             this.txbConfirmPass.TabIndex = 11;
             // 
@@ -141,11 +145,24 @@
             this.pbUserImage.TabStop = false;
             this.pbUserImage.Click += new System.EventHandler(this.pbUserImage_Click);
             // 
+            // pbVisibilidade
+            // 
+            this.pbVisibilidade.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbVisibilidade.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.EyeOpen;
+            this.pbVisibilidade.Location = new System.Drawing.Point(217, 308);
+            this.pbVisibilidade.Name = "pbVisibilidade";
+            this.pbVisibilidade.Size = new System.Drawing.Size(39, 41);
+            this.pbVisibilidade.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbVisibilidade.TabIndex = 17;
+            this.pbVisibilidade.TabStop = false;
+            this.pbVisibilidade.Click += new System.EventHandler(this.pbVisibilidade_Click);
+            // 
             // FormRegistar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(259, 495);
+            this.Controls.Add(this.pbVisibilidade);
             this.Controls.Add(this.pbUserImage);
             this.Controls.Add(this.btnRegistar);
             this.Controls.Add(this.label2);
@@ -160,6 +177,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Registar";
             ((System.ComponentModel.ISupportInitialize)(this.pbUserImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbVisibilidade)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,5 +195,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox pbUserImage;
         private System.Windows.Forms.OpenFileDialog openFileDialogImagem;
+        private System.Windows.Forms.PictureBox pbVisibilidade;
     }
 }

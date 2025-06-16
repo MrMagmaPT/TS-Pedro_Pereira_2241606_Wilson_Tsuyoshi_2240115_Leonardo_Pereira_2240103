@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using static Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Models.MessageTypeEnum;
 using System.Security.Cryptography;
+using Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties;
 
 namespace Projeto_TS
 {
@@ -229,6 +230,22 @@ namespace Projeto_TS
             } else
             {
                 return dadosCifrados;
+            }
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            if (txbPassword.PasswordChar == '\0')
+            {
+                //se nao ta censurado censura
+                txbPassword.PasswordChar = '*';
+                pbVisibilidade.Image = Resources.EyeOpen;
+            }
+            else
+            {
+                //se ta censurado descensura
+                txbPassword.PasswordChar = '\0';
+                pbVisibilidade.Image = Resources.eyeClose;
             }
         }
     }

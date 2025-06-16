@@ -169,5 +169,11 @@
   <ItemGroup>
     <None Include="Icons\Userimage_Custom.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EyeOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eyeClose.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

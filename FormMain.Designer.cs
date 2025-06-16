@@ -48,7 +48,7 @@
             this.btnEnviarMsg.Location = new System.Drawing.Point(597, 413);
             this.btnEnviarMsg.Name = "btnEnviarMsg";
             this.btnEnviarMsg.Size = new System.Drawing.Size(128, 49);
-            this.btnEnviarMsg.TabIndex = 0;
+            this.btnEnviarMsg.TabIndex = 1;
             this.btnEnviarMsg.Text = "Enviar";
             this.btnEnviarMsg.UseVisualStyleBackColor = true;
             this.btnEnviarMsg.Click += new System.EventHandler(this.btnEnviarMsg_Click);
@@ -62,7 +62,7 @@
             this.tbxMsg.Multiline = true;
             this.tbxMsg.Name = "tbxMsg";
             this.tbxMsg.Size = new System.Drawing.Size(560, 67);
-            this.tbxMsg.TabIndex = 1;
+            this.tbxMsg.TabIndex = 0;
             this.tbxMsg.TextChanged += new System.EventHandler(this.tbxMsg_TextChanged);
             // 
             // txbChat
