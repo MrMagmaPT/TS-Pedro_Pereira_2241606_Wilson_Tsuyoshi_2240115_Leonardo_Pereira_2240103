@@ -7,12 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "projeto_TS", "projeto_TS.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servidor", "Servidor\Servidor.csproj", "{8596FE88-1DC9-4548-AB2C-0F5FF5824341}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
-	ProjectSection(SolutionItems) = preProject
-		C:\Users\glamo\Downloads\Form1Vivobook.cs = C:\Users\glamo\Downloads\Form1Vivobook.cs
-		C:\Users\glamo\Downloads\ProgramVivobook.cs = C:\Users\glamo\Downloads\ProgramVivobook.cs
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

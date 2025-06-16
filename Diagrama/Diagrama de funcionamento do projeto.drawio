@@ -1,0 +1,173 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.2 Chrome/134.0.6998.178 Electron/35.1.2 Safari/537.36" version="26.2.2">
+  <diagram name="Página-1" id="cJjzoSJ3VrqZ1hMWtz36">
+    <mxGraphModel dx="1305" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-9" target="AzTWTOeYIIQ1O5UTOL4a-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-9" value="UserData" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="310" y="560" width="80" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-10" value="Registro de dados" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="10" y="190" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-13" value="FormRegistar" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="152.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-16" value="Dados de Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="285" y="52.5" width="100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-17" value="FormLogin" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="305" y="22.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-20" value="Verifica os dados na base de dados" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="410" y="465" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-24" value="Mensagem" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="590" y="265" width="90" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-25" value="FormMain&lt;br&gt;(Chat Principal)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="592.5" y="230" width="85" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-28" value="" style="html=1;shape=mxgraph.basic.isocube;isoAngle=15;" vertex="1" parent="1">
+          <mxGeometry x="300" y="270" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-29" value="Servidor" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="315" y="370" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-31" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-9" target="AzTWTOeYIIQ1O5UTOL4a-29">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="510" as="sourcePoint" />
+            <mxPoint x="380" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-33" value="Base de Dados" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="630" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-36" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="AzTWTOeYIIQ1O5UTOL4a-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="310" as="sourcePoint" />
+            <mxPoint x="340" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-42" value="dados encriptados" style="rounded=1;whiteSpace=wrap;html=1;rotation=20;" vertex="1" parent="1">
+          <mxGeometry x="140" y="250" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-47" value="dados desencriptados e validados" style="rounded=1;whiteSpace=wrap;html=1;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="305" y="460" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-55" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-16" target="AzTWTOeYIIQ1O5UTOL4a-54">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="125" as="sourcePoint" />
+            <mxPoint x="350" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-54" value="dados de login encriptados" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="147.5" width="90" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-58" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.343;entryY=0.06;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-54" target="AzTWTOeYIIQ1O5UTOL4a-28">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="280" as="sourcePoint" />
+            <mxPoint x="430" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-61" value="O servidor vai consultar a base de dados" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="335" y="210" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-64" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-60">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="320" as="sourcePoint" />
+            <mxPoint x="590" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-65" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0;exitDx=100;exitDy=24.0078759080116;exitPerimeter=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-28" target="AzTWTOeYIIQ1O5UTOL4a-60">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="294" as="sourcePoint" />
+            <mxPoint x="590" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-60" value="manda a foto de perfil como resposta que deu certo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-71" value="redireciona para o FormMain&lt;div&gt;(Chat principal)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="210" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-76" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-24" target="AzTWTOeYIIQ1O5UTOL4a-74">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="680" y="290" as="sourcePoint" />
+            <mxPoint x="900" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-74" value="dados são encriptados assinados e mandado para o servidor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="260" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-84" value="Mensagens" style="swimlane;startSize=20;horizontal=1;childLayout=treeLayout;horizontalTree=0;sortEdges=1;resizable=0;containerType=tree;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="750" y="510" width="560" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-85" value="Mensagem" style="whiteSpace=wrap;html=1;" vertex="1" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry x="230" y="40" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-86" value="Cliente1" style="whiteSpace=wrap;html=1;" vertex="1" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry x="20" y="130" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-87" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;rounded=1;curved=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startSize=6;endSize=6;" edge="1" parent="AzTWTOeYIIQ1O5UTOL4a-84" source="AzTWTOeYIIQ1O5UTOL4a-85" target="AzTWTOeYIIQ1O5UTOL4a-86">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-88" value="Cliente2" style="whiteSpace=wrap;html=1;" vertex="1" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry x="160" y="130" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-89" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;rounded=1;curved=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startSize=6;endSize=6;" edge="1" parent="AzTWTOeYIIQ1O5UTOL4a-84" source="AzTWTOeYIIQ1O5UTOL4a-85" target="AzTWTOeYIIQ1O5UTOL4a-88">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-92" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;rounded=1;curved=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startSize=6;endSize=6;" edge="1" target="AzTWTOeYIIQ1O5UTOL4a-93" source="AzTWTOeYIIQ1O5UTOL4a-85" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="870" y="295" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-93" value="Cliente3" style="whiteSpace=wrap;html=1;" vertex="1" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry x="300" y="130" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-94" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;rounded=1;curved=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startSize=6;endSize=6;" edge="1" target="AzTWTOeYIIQ1O5UTOL4a-95" source="AzTWTOeYIIQ1O5UTOL4a-85" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1010" y="295" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-95" value="Cliente N" style="whiteSpace=wrap;html=1;" vertex="1" parent="AzTWTOeYIIQ1O5UTOL4a-84">
+          <mxGeometry x="440" y="130" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-107" value="" style="html=1;shape=mxgraph.basic.isocube;isoAngle=15;" vertex="1" parent="1">
+          <mxGeometry x="980" y="250" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-108" value="Servidor" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="995" y="350" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-119" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.4;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-74" target="AzTWTOeYIIQ1O5UTOL4a-107">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="890" y="430" as="sourcePoint" />
+            <mxPoint x="940" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-120" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-121">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1020" y="520" as="sourcePoint" />
+            <mxPoint x="1030" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-122" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="AzTWTOeYIIQ1O5UTOL4a-108" target="AzTWTOeYIIQ1O5UTOL4a-121">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030" y="380" as="sourcePoint" />
+            <mxPoint x="1030" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-121" value="Mensagem" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="410" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="AzTWTOeYIIQ1O5UTOL4a-123" value="Os dados são decriptados e verificado a assinatura e mandado para todos os clientes se valido" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="285" width="210" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
