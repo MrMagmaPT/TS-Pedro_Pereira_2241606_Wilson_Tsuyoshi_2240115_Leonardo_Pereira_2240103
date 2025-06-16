@@ -95,23 +95,20 @@ namespace Projeto_TS
             //Envia a chave publica para o servidor
             ns.Write(packetChave, 0, packetChave.Length);
 
-
-
-
             // recebe a chave simetrica do servidor
             ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
             //ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
             byte[] chaveSimetricaCifrada = protocolSI.GetData(); //obtem a chave simetrica cifrada com a chave publica
 
 
-            // 1. Decifrar chave simétrica usando chave privada RSA
+            //Decifrar chave simétrica usando chave privada RSA
             byte[] chaveSimetricaDecifrada;
             try
             {
 
                 chaveSimetricaDecifrada = rsa.Decrypt(chaveSimetricaCifrada, true);
 
-                // 2. Guardar a chave simétrica decifrada (em Base64 para fácil armazenamento)
+                //Guardar a chave simétrica decifrada (em Base64 para fácil armazenamento)
                 chaveSimetrica = Convert.ToBase64String(chaveSimetricaDecifrada);
 
             }
@@ -166,7 +163,10 @@ namespace Projeto_TS
             {
                 // Lê a resposta do servidor
                 ns.Read(protocolSI.Buffer, 0, protocolSI.Buffer.Length);
-                byte[] profPic = protocolSI.GetData(); // Obtém os dados da resposta da stream
+                byte[] profPicCifrada = protocolSI.GetData(); // Obtém os dados da resposta da stream
+
+                //decifrar profilepic
+                byte[] profPic = decifrarProfPic(profPicCifrada,Convert.FromBase64String(chaveSimetrica));
 
                 if (profPic[0] != 48) {
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -179,6 +179,47 @@ namespace Projeto_TS
                     return;
                 }
             };
+        }
+
+        public byte[] decifrarProfPic(byte[] dadosCifrados,byte[] chavesimetrica)
+        {
+            if (dadosCifrados[0] != 48) 
+            {
+                try
+                {
+                    byte[] iv = new byte[16];
+                    Buffer.BlockCopy(dadosCifrados, 0, iv, 0, 16);
+
+                    byte[] dadosCifradosSemIV = new byte[dadosCifrados.Length - 16];
+                    Buffer.BlockCopy(dadosCifrados, 16, dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+
+                    byte[] chaveSimetricaParaDecifrar = chavesimetrica;
+                    if (chaveSimetricaParaDecifrar == null)
+                        return dadosCifrados;
+
+                    using (Aes aes = Aes.Create())
+                    {
+                        aes.Key = chaveSimetricaParaDecifrar;
+                        aes.IV = iv;
+
+                        using (MemoryStream ms = new MemoryStream())
+                        using (CryptoStream cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                        {
+                            cs.Write(dadosCifradosSemIV, 0, dadosCifradosSemIV.Length);
+                            cs.FlushFinalBlock();
+                            return ms.ToArray();
+                        }
+                    }
+                }
+                catch (CryptographicException ex)
+                {
+                    Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                    return dadosCifrados;
+                }
+            } else
+            {
+                return dadosCifrados;
+            }
         }
     }
 }

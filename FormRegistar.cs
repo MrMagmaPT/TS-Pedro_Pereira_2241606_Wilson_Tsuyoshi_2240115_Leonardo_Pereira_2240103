@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
@@ -193,14 +194,6 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
                 ns = client.GetStream(); // Obtém o network stream do cliente para enviar e receber dados
                 protocolSI = new ProtocolSI(); // Instanciação do protocolo SI
 
-                //encripatar a mensagem com o protocolo SI
-
-            
-                //  _____ __  __  ____ _____ __ _____ _____  ___   ____  ___   _____  
-                //  ||==  ||\\|| ((    ||_// || ||_//  ||   ||=|| ((    ||=|| ((   )) 
-                //  ||___ || \||  \\__ || \\ || ||     ||   || ||  \\__ || ||  \\_//  
-
-                                                                                                                                                            
 
                 //prepara a informação em modelo do protocolo SI
                 byte[] packet = protocolSI.Make(ProtocolSICmdType.DATA, mensagem); // Criação da mensagem com o tipo de comando e os dados do utilizador
@@ -229,6 +222,34 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
             ns.Close();
             client.Close();
             this.Close(); // Fecha o formulário de registo
+        }
+
+        public byte[] cifrarRegistar(byte[] mensagem, ClientInfo cliente)
+        {
+            //encriptar mensagem
+            byte[] mensagemCifrada;
+            using (Aes aes = Aes.Create())
+            {
+                // Configurar a chave AES
+                aes.Key = cliente.chaveSimetrica;
+
+                // Criar o cifrador
+                using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    // Escrever o IV primeiro (necessário para decifração)
+                    ms.Write(aes.IV, 0, aes.IV.Length);
+
+                    // Cifrar os dados
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(mensagem, 0, mensagem.Length);
+                        cs.FlushFinalBlock();
+                    }
+
+                    return mensagemCifrada = ms.ToArray();
+                }
+            }
         }
     }
 }

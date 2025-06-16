@@ -70,14 +70,11 @@ namespace Servidor.Models
                         switch (dadosCifrados[0])
                         {
                             case 1:
-                                //decifrar a mensagem e meter na variavel dados[]
-                                byte[] dadosRegistarSemTipo = decifrarMensagemRecebida(dadosCifradosSemTipo);
-
-                                Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosRegistarSemTipo); // Desserializa os dados recebidos para um objeto Usuario
+                                Usuario user = ControllerSerializar.DeserializaDeArrayBytes<Usuario>(dadosCifradosSemTipo); // Desserializa os dados recebidos para um objeto Usuario
                                 string mensagem = controllerRegistar.Registar(user); //enviar os dados do usuario para o controller de registo e obter a mensagem de resposta
                                 username = user.username; //obter o username do utilizador para mostrar no cmd
                                 //realiza o registo do utilizador
-                                Console.WriteLine("[Servidor] - Registo de utilizador iniciado pelo cliente: " + username);
+                                addToLogAndMessage("[Servidor] - Registo de utilizador iniciado pelo cliente: " + username);
 
                                 //mandar msg para o utilizador a enviar uma resposta a dizer se foi bem sucedido ou nao
 
@@ -102,7 +99,7 @@ namespace Servidor.Models
                                 string SaltePasswordHashString = parts[1];
 
                                 //realiza o login do utilizador e mostra no cmd
-                                Console.WriteLine("[Servidor] - Login iniciado pelo cliente: " + username);
+                                addToLogAndMessage("[Servidor] - Login iniciado pelo cliente: " + username);
 
                                 //Converte o SaltePasswordHashString de volta para um array de bytes
                                 byte[] profPic = controllerLogin.verifyLogin(username, SaltePasswordHashString);
@@ -110,17 +107,22 @@ namespace Servidor.Models
                                 if (profPic == null)
                                 {
                                     //Se o utilizador nao existir, envia uma mensagem de erro
-                                    Console.WriteLine("[Servidor] - Login falhou para o cliente: " + username);
+                                    addToLogAndMessage("[Servidor] - Login falhou para o cliente: " + username);
                                     respostaProfilePic = protocolSI.Make(ProtocolSICmdType.EOT);
                                 }
                                 else
                                 {
-                                    //Se o utilizador existir, envia a imagem do perfil
-                                    Console.WriteLine("[Servidor] - Login bem sucedido para o cliente: " + username);
-                                    respostaProfilePic = protocolSI.Make(ProtocolSICmdType.DATA, profPic); // Envia a imagem do perfil
                                     ClientInfo cliente_novo = new ClientInfo(UltimachavePub, ultimoCliente, chaveSimetrica);
                                     clientes.Add(cliente_novo);
+                                    //Se o utilizador existir, envia a imagem do perfil
+                                    addToLogAndMessage("[Servidor] - Login bem sucedido para o cliente: " + username);
+                                    //encriptar profpic
+                                    byte[] profPicEncript = cifrarMensagem(profPic, cliente_novo);
+                                    //enviar profpic
+                                    respostaProfilePic = protocolSI.Make(ProtocolSICmdType.DATA, profPicEncript); // Envia a imagem do perfil
+                                    
                                 }
+
                                 networkStream.Write(respostaProfilePic, 0, respostaProfilePic.Length);
                                 break;
                                 
@@ -132,7 +134,7 @@ namespace Servidor.Models
                                 string mensagemString = "[" + username + "] - " + Encoding.UTF8.GetString(mensagemSemTipo);
 
                                 //mostra a mensagem recebida no cmd
-                                Console.WriteLine(mensagemString);
+                                addToLogAndMessage(mensagemString);
 
                                 EnviarParaTodos(mensagemString); //Envia a mensagem para todos os clientes conectados
                                 break;
@@ -167,7 +169,7 @@ namespace Servidor.Models
                                 byte[] respostaChave = protocolSI.Make(ProtocolSICmdType.DATA, chaveSimetricaCifrada);
                                 networkStream.Write(respostaChave, 0, respostaChave.Length);
 
-                                Console.WriteLine($"[Servidor] - Chave simétrica gerada e enviada para o cliente.");
+                                addToLogAndMessage("[Servidor] - Chave simétrica gerada e enviada para o cliente.");
                                 break;
 
                             default:
@@ -179,7 +181,7 @@ namespace Servidor.Models
                         
                     //CASO O CLIENTE ENVIE EOT (FIM DA TRANSMISSÃO)
                     case ProtocolSICmdType.EOT:
-                        Console.WriteLine("[Servidor] - A terminar a ligação com o cliente: " + username);
+                        addToLogAndMessage("[Servidor] - A terminar a ligação com o cliente: " + username);
                         ack = protocolSI.Make(ProtocolSICmdType.ACK);
                         networkStream.Write(ack, 0, ack.Length);
                         break;
@@ -225,7 +227,7 @@ namespace Servidor.Models
                 catch (Exception)
                 {
                     //Caso nao chegue a mensagem ao cliente, remove o cliente da lista e fecha a conexão, considera tambem como cliente desconectado
-                    Console.WriteLine("[Servidor] - A terminar a ligação com o cliente: " + username);
+                    addToLogAndMessage("[Servidor] - A terminar a ligação com o cliente: " + username);
                     dadosCliente.cliente.Close();
                     clientes.Remove(dadosCliente);
                 }
@@ -289,7 +291,7 @@ namespace Servidor.Models
             }
             catch (CryptographicException ex)
             {
-                Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                addToLogAndMessage($"[Servidor] - Erro ao decifrar: {ex.Message}");
                 return dadosCifrados;
             }
         }
@@ -324,7 +326,7 @@ namespace Servidor.Models
             }
             catch (CryptographicException ex)
             {
-                Console.WriteLine($"[Servidor] - Erro ao decifrar: {ex.Message}");
+                addToLogAndMessage($"[Servidor] - Erro ao decifrar: {ex.Message}");
                 return dadosCifrados;
             }
         }
@@ -341,5 +343,32 @@ namespace Servidor.Models
             return null;
         }
 
+        public void addToLogAndMessage(string mensagem, bool writeOnConsole = true)
+        {
+            if (writeOnConsole == true)
+            {
+                Console.WriteLine(mensagem);
+            }
+
+            string dataAtual = DateTime.Now.ToString("yyyy-MM-dd");
+            string dataHoraAtual = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ff");
+
+            // Define o caminho do diretório de logs
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string logsDir = Path.Combine(documentsPath, "Server_Logs");
+
+            // Cria o diretório se não existir
+            Directory.CreateDirectory(logsDir);
+
+            string fileName = "Log_" + dataAtual + ".txt";
+            string filePath = Path.Combine(logsDir, fileName);
+
+            // Append das mensagens para o file log com time stamp
+            using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                sw.WriteLine(dataHoraAtual + " " + mensagem);
+            }
+        }
     }
 }

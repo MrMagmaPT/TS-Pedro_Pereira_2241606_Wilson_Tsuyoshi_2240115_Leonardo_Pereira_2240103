@@ -37,12 +37,12 @@ namespace Servidor
                 TcpClient client = listener.AcceptTcpClient();
                 //INCREMENTE O NUMERO DE CLIENTES
                 clientCounter++;
-                Console.WriteLine("[Servidor] - Cliente connectado.");
 
                 ClientHandler clientHandler = new ClientHandler(client);
+                clientHandler.addToLogAndMessage("[Servidor] - O Server está online e a ouvir na porta: " + PORT, false);
+                clientHandler.addToLogAndMessage("[Servidor] - Cliente connectado.");
                 clientHandler.Handle();
             }
-
         }
     }
 }
