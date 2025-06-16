@@ -49,18 +49,22 @@
             // lbimagem
             // 
             this.lbimagem.AutoSize = true;
-            this.lbimagem.Location = new System.Drawing.Point(267, 18);
+            this.lbimagem.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbimagem.Location = new System.Drawing.Point(72, 9);
+            this.lbimagem.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbimagem.Name = "lbimagem";
-            this.lbimagem.Size = new System.Drawing.Size(301, 16);
+            this.lbimagem.Size = new System.Drawing.Size(520, 24);
             this.lbimagem.TabIndex = 6;
-            this.lbimagem.Text = "Selecione a Imagem que deseja colocar de perfil";
+            this.lbimagem.Text = "Selecione a Imagem que deseja para a sua Imagem de Perfil";
             // 
             // pbimagem1
             // 
+            this.pbimagem1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagem1.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_1;
-            this.pbimagem1.Location = new System.Drawing.Point(12, 51);
+            this.pbimagem1.Location = new System.Drawing.Point(9, 41);
+            this.pbimagem1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagem1.Name = "pbimagem1";
-            this.pbimagem1.Size = new System.Drawing.Size(256, 256);
+            this.pbimagem1.Size = new System.Drawing.Size(200, 200);
             this.pbimagem1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagem1.TabIndex = 7;
             this.pbimagem1.TabStop = false;
@@ -68,10 +72,12 @@
             // 
             // pbimagemCustom
             // 
+            this.pbimagemCustom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagemCustom.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_Custom;
-            this.pbimagemCustom.Location = new System.Drawing.Point(566, 324);
+            this.pbimagemCustom.Location = new System.Drawing.Point(459, 263);
+            this.pbimagemCustom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagemCustom.Name = "pbimagemCustom";
-            this.pbimagemCustom.Size = new System.Drawing.Size(256, 256);
+            this.pbimagemCustom.Size = new System.Drawing.Size(200, 200);
             this.pbimagemCustom.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagemCustom.TabIndex = 5;
             this.pbimagemCustom.TabStop = false;
@@ -79,10 +85,12 @@
             // 
             // pbimagem5
             // 
+            this.pbimagem5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagem5.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_5;
-            this.pbimagem5.Location = new System.Drawing.Point(289, 324);
+            this.pbimagem5.Location = new System.Drawing.Point(236, 263);
+            this.pbimagem5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagem5.Name = "pbimagem5";
-            this.pbimagem5.Size = new System.Drawing.Size(256, 256);
+            this.pbimagem5.Size = new System.Drawing.Size(200, 200);
             this.pbimagem5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagem5.TabIndex = 4;
             this.pbimagem5.TabStop = false;
@@ -90,10 +98,12 @@
             // 
             // pbimagem4
             // 
+            this.pbimagem4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagem4.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_4;
-            this.pbimagem4.Location = new System.Drawing.Point(12, 324);
+            this.pbimagem4.Location = new System.Drawing.Point(9, 263);
+            this.pbimagem4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagem4.Name = "pbimagem4";
-            this.pbimagem4.Size = new System.Drawing.Size(256, 256);
+            this.pbimagem4.Size = new System.Drawing.Size(200, 200);
             this.pbimagem4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagem4.TabIndex = 3;
             this.pbimagem4.TabStop = false;
@@ -101,10 +111,12 @@
             // 
             // pbimagem3
             // 
+            this.pbimagem3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagem3.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_3;
-            this.pbimagem3.Location = new System.Drawing.Point(566, 51);
+            this.pbimagem3.Location = new System.Drawing.Point(459, 41);
+            this.pbimagem3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagem3.Name = "pbimagem3";
-            this.pbimagem3.Size = new System.Drawing.Size(256, 256);
+            this.pbimagem3.Size = new System.Drawing.Size(200, 200);
             this.pbimagem3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagem3.TabIndex = 2;
             this.pbimagem3.TabStop = false;
@@ -112,10 +124,12 @@
             // 
             // pbimagem2
             // 
+            this.pbimagem2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbimagem2.Image = global::Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Properties.Resources.Userimage_2;
-            this.pbimagem2.Location = new System.Drawing.Point(289, 51);
+            this.pbimagem2.Location = new System.Drawing.Point(236, 41);
+            this.pbimagem2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbimagem2.Name = "pbimagem2";
-            this.pbimagem2.Size = new System.Drawing.Size(256, 256);
+            this.pbimagem2.Size = new System.Drawing.Size(200, 200);
             this.pbimagem2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbimagem2.TabIndex = 1;
             this.pbimagem2.TabStop = false;
@@ -127,9 +141,12 @@
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(355, 602);
+            this.btnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancelar.Location = new System.Drawing.Point(294, 479);
+            this.btnCancelar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(103, 26);
+            this.btnCancelar.Size = new System.Drawing.Size(83, 30);
             this.btnCancelar.TabIndex = 8;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
@@ -137,9 +154,10 @@
             // 
             // FormSelecionarImagem
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 640);
+            this.ClientSize = new System.Drawing.Size(680, 520);
+            this.ControlBox = false;
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.pbimagem1);
             this.Controls.Add(this.lbimagem);
@@ -148,9 +166,10 @@
             this.Controls.Add(this.pbimagem4);
             this.Controls.Add(this.pbimagem3);
             this.Controls.Add(this.pbimagem2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FormSelecionarImagem";
-            this.Text = "FormSelecionarImagem";
             ((System.ComponentModel.ISupportInitialize)(this.pbimagem1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbimagemCustom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbimagem5)).EndInit();

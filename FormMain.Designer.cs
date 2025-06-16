@@ -42,6 +42,7 @@
             // 
             // btnEnviarMsg
             // 
+            this.btnEnviarMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEnviarMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEnviarMsg.Location = new System.Drawing.Point(597, 413);
             this.btnEnviarMsg.Name = "btnEnviarMsg";
@@ -53,6 +54,9 @@
             // 
             // tbxMsg
             // 
+            this.tbxMsg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbxMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbxMsg.Location = new System.Drawing.Point(27, 395);
             this.tbxMsg.Multiline = true;
             this.tbxMsg.Name = "tbxMsg";
@@ -61,6 +65,11 @@
             // 
             // txbChat
             // 
+            this.txbChat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txbChat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txbChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F);
             this.txbChat.Location = new System.Drawing.Point(27, 74);
             this.txbChat.Multiline = true;
             this.txbChat.Name = "txbChat";
@@ -70,7 +79,6 @@
             // 
             // lbNome
             // 
-            this.lbNome.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lbNome.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbNome.Location = new System.Drawing.Point(12, 9);
             this.lbNome.Name = "lbNome";
@@ -81,6 +89,7 @@
             // 
             // lbServerIP
             // 
+            this.lbServerIP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbServerIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbServerIP.Location = new System.Drawing.Point(543, 9);
             this.lbServerIP.Name = "lbServerIP";
@@ -101,6 +110,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(23, 362);
             this.label2.Name = "label2";
@@ -111,8 +121,9 @@
             // 
             // pbUserImage
             // 
+            this.pbUserImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbUserImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbUserImage.Location = new System.Drawing.Point(597, 221);
+            this.pbUserImage.Location = new System.Drawing.Point(597, 74);
             this.pbUserImage.Name = "pbUserImage";
             this.pbUserImage.Size = new System.Drawing.Size(128, 128);
             this.pbUserImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;

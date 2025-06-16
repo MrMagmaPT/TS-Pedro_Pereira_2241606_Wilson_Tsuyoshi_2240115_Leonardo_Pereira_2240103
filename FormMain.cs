@@ -111,7 +111,13 @@ namespace Projeto_TS
             {
                 MessageBox.Show("Por favor, escreva uma mensagem antes de enviar!"); //se estiver, mostra uma mensagem de erro
                 return; //e sai da função
-            } else
+            } 
+            else if (Encoding.UTF8.GetByteCount(tbxMsg.Text) > 999) 
+            {
+                MessageBox.Show("A mensagem nao deve ter mais de 999 caracteres!"); //se estiver, mostra uma mensagem de erro
+                return; //e sai da função
+            } 
+            else
             {
                 //Criação da mensagem (no caso o que for escrito na textbox) e depois de enviar ele limpa
                 string msg = tbxMsg.Text;
@@ -143,7 +149,7 @@ namespace Projeto_TS
                         {
                             int bytesRead = networkStream.Read(protSI.Buffer, 0, protSI.Buffer.Length);
 
-                            if (bytesRead == 0) 
+                            if (bytesRead == 0)
                             {
                                 // Conexão fechada pelo servidor
                                 MessageBox.Show("Conexão encerrada pelo servidor.");
