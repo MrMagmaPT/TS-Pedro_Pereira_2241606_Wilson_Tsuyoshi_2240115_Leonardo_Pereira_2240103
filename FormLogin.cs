@@ -168,7 +168,8 @@ namespace Projeto_TS
                 //decifrar profilepic
                 byte[] profPic = decifrarProfPic(profPicCifrada,Convert.FromBase64String(chaveSimetrica));
 
-                if (profPic[0] != 48) {
+                if (profPic[0] != 48)
+                {//48 e o valor associado a NULL em vez de verificar o byte[0] == 0, verificamos se o primeiro byte é diferente de 48
                     MessageBox.Show("Sucesso no login do user: " + username, "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     ClientInfo clienteCompleto = new ClientInfo(publicKey, client, Convert.FromBase64String(chaveSimetrica));
@@ -178,6 +179,15 @@ namespace Projeto_TS
                     this.Hide(); // Esconde o formulário de login
                     return;
                 }
+                else
+                {
+                    MessageBox.Show("Login falhou as credenciais não estão corretas: " + username, "Falhou!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    txbPassword.Text = String.Empty;
+                    txbUsername.Text = String.Empty;
+                    return;
+                }
+
             };
         }
 

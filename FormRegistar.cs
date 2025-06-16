@@ -38,41 +38,18 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115
 
         private void pbUserImage_Click(object sender, EventArgs e)
         {
-            // Abre um diálogo para selecionar uma imagem
-            openFileDialogImagem.Filter = "Image Files|*.png;";
-            openFileDialogImagem.Title = "Select User Image - Max 256x256p";
-            openFileDialogImagem.DefaultExt = "png";
-            openFileDialogImagem.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            openFileDialogImagem.FileName = string.Empty; // Limpa seleção anterior
-            openFileDialogImagem.Multiselect = false; // Permite selecionar apenas uma imagem
-
-
-            if (openFileDialogImagem.ShowDialog() == DialogResult.OK)
+            using (var form = new FormSelecionarImagem())
             {
-                //converter a imagem selecionada para a bdUserData e exibir na PictureBox
-                try
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    string imagePath = openFileDialogImagem.FileName;
-                    Image userImage = Image.FromFile(imagePath);
-                    // Verifica se a imagem é maior que 256x256 pixels
-                    if (userImage.Width > 16 || userImage.Height > 16)
-                    {
-                        MessageBox.Show("A imagem tem de ser 16x16 pixels ou menor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                    // Exibe a imagem na PictureBox
-                    pbUserImage.Image = userImage;
-                    profPic = File.ReadAllBytes(openFileDialogImagem.FileName);
+                    profPic = form.profPic;
+                    pbUserImage.Image = form.ProfPicImage; // Exibe a imagem selecionada na PictureBox
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Error loading image: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Dialog was cancelled
+                    MessageBox.Show("Seleção de imagem cancelada.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
-            else
-            {
-                MessageBox.Show("No image selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
             }
         }
 

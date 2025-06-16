@@ -87,6 +87,12 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormSelecionarImagem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelecionarImagem.Designer.cs">
+      <DependentUpon>FormSelecionarImagem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ClientInfo.cs" />
     <Compile Include="Models\MessageTypeEnum.cs" />
     <Compile Include="Models\Usuario.cs" />
@@ -100,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRegistar.resx">
       <DependentUpon>FormRegistar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelecionarImagem.resx">
+      <DependentUpon>FormSelecionarImagem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -141,6 +150,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\defaultUserImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icons\Userimage_Custom.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

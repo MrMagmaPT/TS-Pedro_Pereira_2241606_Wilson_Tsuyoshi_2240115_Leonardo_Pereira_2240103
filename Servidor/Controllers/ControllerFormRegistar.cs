@@ -59,6 +59,7 @@ namespace Projeto_TS_Pedro_Pereira_2241606_Wilson_Tsuyoshi_2240115.Controllers
                     profPicParam.Value = null;
                 }
                 // Adiciona o parâmetro da imagem ao comando SQL
+
                 comando.Parameters.Add(profPicParam);
 
                 int lines = comando.ExecuteNonQuery(); // Executa o comando SQL e retorna o número de linhas afetadas

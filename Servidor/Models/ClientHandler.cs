@@ -81,6 +81,9 @@ namespace Servidor.Models
                                 byte[] resposta = protocolSI.Make(ProtocolSICmdType.DATA, mensagem);
                                 networkStream.Write(resposta, 0, resposta.Length);
 
+                                ack = protocolSI.Make(ProtocolSICmdType.ACK);
+                                networkStream.Write(ack, 0, ack.Length);
+
                                 break;
                             case 2:
                                 byte[] respostaProfilePic = null;
@@ -175,8 +178,8 @@ namespace Servidor.Models
                             default:
                                 throw new Exception("Tipo de comando desconhecido.");
                         }
-                        ack = protocolSI.Make(ProtocolSICmdType.ACK);
-                        networkStream.Write(ack, 0, ack.Length);
+                        //ack = protocolSI.Make(ProtocolSICmdType.ACK);
+                        //networkStream.Write(ack, 0, ack.Length);
                         break;
                         
                     //CASO O CLIENTE ENVIE EOT (FIM DA TRANSMISSÃO)
@@ -209,28 +212,33 @@ namespace Servidor.Models
 
             byte[] mensagemBytes = UTF8Encoding.UTF8.GetBytes(mensagem);
 
-            foreach (ClientInfo dadosCliente in clientes)
+            lock (clientes)
             {
-                try
+                foreach (ClientInfo dadosCliente in clientes)
                 {
-                    NetworkStream ns = dadosCliente.cliente.GetStream();
 
-                    // encriptar a mensagem
-                    byte[] mensagemBytesCifrados = cifrarMensagem(mensagemBytes, dadosCliente);
+                    try
+                    {
+                        NetworkStream ns = dadosCliente.cliente.GetStream();
 
-                    //transforma em packet de dados
-                    byte[] packetCifrado = protocolSI.Make(ProtocolSICmdType.DATA, mensagemBytesCifrados);
+                        // encriptar a mensagem
+                        byte[] mensagemBytesCifrados = cifrarMensagem(mensagemBytes, dadosCliente);
 
-                    //enviar a mensagem cifrada
-                    ns.Write(packetCifrado, 0, packetCifrado.Length);
+                        //transforma em packet de dados
+                        byte[] packetCifrado = protocolSI.Make(ProtocolSICmdType.DATA, mensagemBytesCifrados);
+
+                        //enviar a mensagem cifrada
+                        ns.Write(packetCifrado, 0, packetCifrado.Length);
+                    }
+                    catch (Exception)
+                    {
+                        //Caso nao chegue a mensagem ao cliente, remove o cliente da lista e fecha a conexão, considera tambem como cliente desconectado
+                        addToLogAndMessage("[Servidor] - A terminar a ligação com o cliente: " + username);
+                        dadosCliente.cliente.Close();
+                        clientes.Remove(dadosCliente);
+                    }
                 }
-                catch (Exception)
-                {
-                    //Caso nao chegue a mensagem ao cliente, remove o cliente da lista e fecha a conexão, considera tambem como cliente desconectado
-                    addToLogAndMessage("[Servidor] - A terminar a ligação com o cliente: " + username);
-                    dadosCliente.cliente.Close();
-                    clientes.Remove(dadosCliente);
-                }
+            
             }
         }
         public byte[] cifrarMensagem(byte[] mensagem,ClientInfo cliente)
