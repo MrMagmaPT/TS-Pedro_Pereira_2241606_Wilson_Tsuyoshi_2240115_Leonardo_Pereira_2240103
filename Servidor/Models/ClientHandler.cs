@@ -279,6 +279,9 @@ namespace Servidor.Models
 
                         //enviar a mensagem cifrada
                         ns.Write(packetCifrado, 0, packetCifrado.Length);
+
+                        //entrega individual
+                        addToLogAndMessage("[Servidor] - Conversação entre clientes: " + username);
                     }
                     catch (Exception)
                     {
@@ -428,11 +431,5 @@ namespace Servidor.Models
                 sw.WriteLine(dataHoraAtual + " " + mensagem);
             }
         }
-    
-       
-
-
-
-
     }
 }

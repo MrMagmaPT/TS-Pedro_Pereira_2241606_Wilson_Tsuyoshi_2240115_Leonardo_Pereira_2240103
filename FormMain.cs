@@ -32,6 +32,11 @@ namespace Projeto_TS
 
         // RSA para assinar
         private RSACryptoServiceProvider rsaSign;
+        private string ultimaMsg = string.Empty;
+
+        //entrega individual
+        private RSACryptoServiceProvider rsaSignature;
+        private RSACryptoServiceProvider rsaVerify;
 
         Thread tReceber;
 
@@ -217,6 +222,7 @@ namespace Projeto_TS
                                 {
                                     txbChat.AppendText(mensagem + Environment.NewLine);
                                 });
+                                ultimaMsg = mensagem;
                             }
                         }
                         // Se for EOT, encerra o loop
@@ -340,11 +346,44 @@ namespace Projeto_TS
             }
             if (charRestantes < 0)
             {
-                btnEnviarMsg.Enabled = false;
+                enviar_bt_TP.Enabled = false;
             }
             else
             {
-                btnEnviarMsg.Enabled = true;
+                enviar_bt_TP.Enabled = true;
+            }
+        }
+
+
+
+        //entrega individual
+        private void btnVerificar_Click(object sender, EventArgs e)
+        {
+            //rsaSign;
+            rsaSignature = rsaSign;
+            rsaVerify = new RSACryptoServiceProvider();
+            rsaVerify.FromXmlString(clienteCompleto.pubkey);
+            byte[] dados = null;
+            string dadosAssinados = null;
+
+            //pega nos dados e inicia a assinatura e verificação
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                dados = Encoding.UTF8.GetBytes(ultimaMsg);
+                byte[] hash = sha256.ComputeHash(dados);
+
+                //tbHashData.Text = Convert.ToBase64String(hash);
+                //tbBitsHashData.Text = (hash.Length * 8).ToString();
+
+                byte[] signature = rsaSignature.SignData(dados, sha256);
+
+                dadosAssinados = Convert.ToBase64String(signature);
+                //tbBitsSignature.Text = (signature.Length * 8).ToString();
+                byte[] dadosAssinadosBites = Convert.FromBase64String(dadosAssinados);
+
+                bool verify = rsaVerify.VerifyData(dados, CryptoConfig.MapNameToOID("SHA256"), dadosAssinadosBites);
+                txbHashVerificada.Text = verify.ToString();
+
             }
         }
     }

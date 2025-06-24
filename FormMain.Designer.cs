@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.btnEnviarMsg = new System.Windows.Forms.Button();
+            this.enviar_bt_TP = new System.Windows.Forms.Button();
             this.tbxMsg = new System.Windows.Forms.TextBox();
             this.txbChat = new System.Windows.Forms.TextBox();
             this.lbNome = new System.Windows.Forms.Label();
@@ -38,20 +38,23 @@
             this.label2 = new System.Windows.Forms.Label();
             this.pbUserImage = new System.Windows.Forms.PictureBox();
             this.lblPalavras = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txbHashVerificada = new System.Windows.Forms.TextBox();
+            this.btnVerificar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbUserImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnEnviarMsg
+            // enviar_bt_TP
             // 
-            this.btnEnviarMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEnviarMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEnviarMsg.Location = new System.Drawing.Point(597, 413);
-            this.btnEnviarMsg.Name = "btnEnviarMsg";
-            this.btnEnviarMsg.Size = new System.Drawing.Size(128, 49);
-            this.btnEnviarMsg.TabIndex = 1;
-            this.btnEnviarMsg.Text = "Enviar";
-            this.btnEnviarMsg.UseVisualStyleBackColor = true;
-            this.btnEnviarMsg.Click += new System.EventHandler(this.btnEnviarMsg_Click);
+            this.enviar_bt_TP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.enviar_bt_TP.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.enviar_bt_TP.Location = new System.Drawing.Point(597, 413);
+            this.enviar_bt_TP.Name = "enviar_bt_TP";
+            this.enviar_bt_TP.Size = new System.Drawing.Size(128, 49);
+            this.enviar_bt_TP.TabIndex = 1;
+            this.enviar_bt_TP.Text = "Enviar";
+            this.enviar_bt_TP.UseVisualStyleBackColor = true;
+            this.enviar_bt_TP.Click += new System.EventHandler(this.btnEnviarMsg_Click);
             // 
             // tbxMsg
             // 
@@ -143,12 +146,45 @@
             this.lblPalavras.TabIndex = 18;
             this.lblPalavras.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(600, 210);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(122, 20);
+            this.label3.TabIndex = 19;
+            this.label3.Text = "Hash Verificada";
+            // 
+            // txbHashVerificada
+            // 
+            this.txbHashVerificada.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbHashVerificada.Location = new System.Drawing.Point(613, 233);
+            this.txbHashVerificada.Name = "txbHashVerificada";
+            this.txbHashVerificada.Size = new System.Drawing.Size(100, 26);
+            this.txbHashVerificada.TabIndex = 20;
+            // 
+            // btnVerificar
+            // 
+            this.btnVerificar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnVerificar.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVerificar.Location = new System.Drawing.Point(597, 265);
+            this.btnVerificar.Name = "btnVerificar";
+            this.btnVerificar.Size = new System.Drawing.Size(128, 49);
+            this.btnVerificar.TabIndex = 21;
+            this.btnVerificar.Text = "Verificar";
+            this.btnVerificar.UseVisualStyleBackColor = true;
+            this.btnVerificar.Click += new System.EventHandler(this.btnVerificar_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(734, 486);
+            this.Controls.Add(this.btnVerificar);
+            this.Controls.Add(this.txbHashVerificada);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.lblPalavras);
             this.Controls.Add(this.pbUserImage);
             this.Controls.Add(this.label2);
@@ -157,7 +193,7 @@
             this.Controls.Add(this.lbNome);
             this.Controls.Add(this.txbChat);
             this.Controls.Add(this.tbxMsg);
-            this.Controls.Add(this.btnEnviarMsg);
+            this.Controls.Add(this.enviar_bt_TP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "FormMain";
@@ -169,7 +205,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnEnviarMsg;
+        private System.Windows.Forms.Button enviar_bt_TP;
         private System.Windows.Forms.TextBox tbxMsg;
         private System.Windows.Forms.TextBox txbChat;
         private System.Windows.Forms.Label lbNome;
@@ -178,6 +214,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox pbUserImage;
         private System.Windows.Forms.Label lblPalavras;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txbHashVerificada;
+        private System.Windows.Forms.Button btnVerificar;
     }
 }
 
